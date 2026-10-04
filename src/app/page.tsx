@@ -27,13 +27,26 @@ import {
   ThumbsUp,
   MessageSquare,
   Star,
-  Send
+  Send,
+  Eye
 } from "lucide-react";
 
 interface ServiceCard { icon: React.ReactNode; title: string; description: string; }
 interface TrustCard { title: string; icon: React.ReactNode; desc: string; }
 interface ProcessStep { step: string; title: string; description: string; }
-interface ShowcaseItem { title: string; category: string; image: string; }
+interface ShowcaseSpec { label: string; value: string; }
+interface ShowcaseItem {
+  id: string;
+  title: string;
+  category: string;
+  tag: "Commercial" | "Residential" | "Interior";
+  image: string;
+  gallery?: string[];
+  dimensions?: string;
+  description: string;
+  specs?: ShowcaseSpec[];
+  featured?: boolean;
+}
 interface Testimonial { quote: string; author: string; role: string; location: string; }
 interface FAQItem { question: string; answer: string; }
 interface Review { name: string; location: string; rating: number; comment: string; date: string; }
@@ -48,6 +61,9 @@ export default function HomePage() {
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [hoverRating, setHoverRating] = useState(0);
+  const [selectedShowcaseItem, setSelectedShowcaseItem] = useState<ShowcaseItem | null>(null);
+  const [activeGalleryImage, setActiveGalleryImage] = useState<string>("");
+  const [activeShowcaseTag, setActiveShowcaseTag] = useState<string>("All");
 
   const [reviews, setReviews] = useState<Review[]>([
     { name: "Praveen Kumar", location: "Trichy", rating: 5, comment: "I bought a 2400 sq.ft plot and was confused about how to structure it. CINORS gave us a Vastu-friendly 2D layout and a beautiful 3D elevation. Our contractor easily followed their construction-ready structural drawings.", date: "March 2024" },
@@ -154,9 +170,68 @@ export default function HomePage() {
   ];
 
   const showcaseItems: ShowcaseItem[] = [
-    { title: "Modern Minimalist Villa", category: "3D Elevation & Planning", image: "/images/dream-home.png" },
-    { title: "Contemporary Double-Story Home", category: "Residential Architecture", image: "/images/modern-villa.png" },
-    { title: "Luxury Lounge Interior Concept", category: "Interior Design", image: "/images/interior-design.png" },
+    {
+      id: "tensile-canopy",
+      title: "Proposed Tensile Canopy (10m x 5m) for Coffee Shop",
+      category: "Commercial Architecture & Tensile Structures",
+      tag: "Commercial",
+      image: "/images/tensile-canopy-1.jpg",
+      gallery: [
+        "/images/tensile-canopy-1.jpg",
+        "/images/tensile-canopy-2.jpg",
+        "/images/tensile-canopy-3.jpg",
+        "/images/tensile-canopy-4.jpg",
+      ],
+      dimensions: "10.0m x 5.0m (50 m² / ~538 sq.ft)",
+      description: "Custom-engineered 10m x 5m cantilevered tensile fabric canopy designed for an outdoor rooftop coffee shop and alfresco seating area, integrated with a modular shipping-container café kiosk.",
+      specs: [
+        { label: "Span / Footprint", value: "10.0m x 5.0m (50 m² coverage)" },
+        { label: "Structural Framing", value: "Heavy-gauge tubular steel columns with cantilevered tension struts" },
+        { label: "Roofing Membrane", value: "Architectural PVDF tensile fabric (waterproof, UV & heat resistant)" },
+        { label: "Application", value: "Outdoor Coffee Shop, Rooftop Café & Alfresco Dining" },
+        { label: "Key Engineering", value: "Tie-back cable tensioners, wind load deflection & integrated rainwater runoff" },
+      ],
+      featured: true,
+    },
+    {
+      id: "modern-villa",
+      title: "Modern Minimalist Villa",
+      category: "3D Elevation & Planning",
+      tag: "Residential",
+      image: "/images/dream-home.png",
+      dimensions: "35ft x 50ft Plot",
+      description: "Contemporary G+1 independent residential elevation featuring natural stone textures, expansive glass apertures, and vastu-compliant spatial zoning.",
+      specs: [
+        { label: "Type", value: "G+1 Luxury Residential Villa" },
+        { label: "Key Features", value: "Cross-ventilation, open-concept living, private terrace garden" },
+      ],
+    },
+    {
+      id: "contemporary-home",
+      title: "Contemporary Double-Story Home",
+      category: "Residential Architecture",
+      tag: "Residential",
+      image: "/images/modern-villa.png",
+      dimensions: "30ft x 40ft Plot",
+      description: "Smart urban duplex engineered to maximize space and natural ventilation on standard residential plots across Tamil Nadu.",
+      specs: [
+        { label: "Type", value: "Urban Duplex Residence" },
+        { label: "Key Features", value: "Efficient structural grid, optimized column sizing, cost-controlled layout" },
+      ],
+    },
+    {
+      id: "interior-design",
+      title: "Luxury Lounge Interior Concept",
+      category: "Interior Design",
+      tag: "Interior",
+      image: "/images/interior-design.png",
+      dimensions: "650 sq.ft Living Space",
+      description: "Bespoke modern living and dining space concept combining indirect warm LED lighting, acoustic wall paneling, and minimalist wooden finishes.",
+      specs: [
+        { label: "Type", value: "Living & Dining Interior" },
+        { label: "Key Features", value: "Concealed cabinetry, modular spatial division, ambient cove lighting" },
+      ],
+    },
   ];
 
   const faqs: FAQItem[] = [
@@ -442,34 +517,124 @@ export default function HomePage() {
       {/* SHOWCASE SECTION */}
       <section id="showcase" className="py-16 sm:py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-10 sm:mb-12 gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 sm:mb-10 gap-4">
             <div>
               <h2 className="text-xs font-black uppercase text-orange-500 tracking-widest mb-3">Our Work Portfolio</h2>
               <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">Design Showcase</h3>
               <div className="w-16 h-1 bg-orange-500 mt-4" />
             </div>
-            <button onClick={() => triggerQuickWhatsApp("Showcase Inquiry")} className="self-start sm:self-auto px-5 py-2.5 border border-navy-200 text-navy-950 text-xs font-bold rounded-md uppercase tracking-wider hover:bg-navy-50 hover:border-navy-300 transition-colors flex items-center gap-2 group">
+            <button onClick={() => triggerQuickWhatsApp("Showcase Custom Inquiry")} className="self-start sm:self-auto px-5 py-2.5 border border-navy-200 text-navy-950 text-xs font-bold rounded-md uppercase tracking-wider hover:bg-navy-50 hover:border-navy-300 transition-colors flex items-center gap-2 group">
               Request Custom Design <ArrowUpRight className="w-4 h-4 group-hover:-translate-y-0.5 group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {showcaseItems.map((item, idx) => (
-              <motion.div key={idx} whileHover={{ y: -5 }} className="group rounded-xl overflow-hidden shadow-lg border border-slate-100 flex flex-col relative h-[340px] sm:h-[380px]">
-                <div className="relative w-full h-[240px] sm:h-[280px]">
-                  <Image src={item.image} alt={item.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent opacity-80" />
-                </div>
-                <div className="p-5 sm:p-6 bg-white flex-1 flex flex-col justify-between border-t border-slate-100 z-10">
-                  <div>
-                    <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1">{item.category}</span>
-                    <h4 className="text-base sm:text-lg font-bold text-navy-950 tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors">{item.title}</h4>
-                  </div>
-                  <button onClick={() => triggerQuickWhatsApp(`Inquiry on ${item.title}`)} className="text-[11px] font-bold text-navy-900/60 uppercase tracking-wider hover:text-orange-500 flex items-center gap-1 transition-colors self-start mt-3">
-                    View Layout Spec <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </motion.div>
+
+          {/* CATEGORY FILTER TABS */}
+          <div className="flex flex-wrap gap-2 mb-8 sm:mb-10">
+            {["All", "Commercial", "Residential", "Interior"].map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setActiveShowcaseTag(tag)}
+                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                  activeShowcaseTag === tag
+                    ? "bg-navy-950 text-white shadow-md shadow-navy-950/20"
+                    : "bg-slate-100 text-navy-900/70 hover:bg-slate-200"
+                }`}
+              >
+                {tag === "All" ? "All Projects" : `${tag} Architecture`}
+              </button>
             ))}
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+            {showcaseItems
+              .filter((item) => activeShowcaseTag === "All" || item.tag === activeShowcaseTag)
+              .map((item) => (
+                <motion.div
+                  key={item.id}
+                  whileHover={{ y: -5 }}
+                  className={`group rounded-xl overflow-hidden shadow-lg border flex flex-col relative transition-all ${
+                    item.featured
+                      ? "border-orange-200 ring-2 ring-orange-500/20 sm:col-span-2 lg:col-span-2"
+                      : "border-slate-100"
+                  }`}
+                >
+                  <div
+                    className={`relative w-full cursor-pointer overflow-hidden ${
+                      item.featured ? "h-[260px] sm:h-[340px]" : "h-[220px] sm:h-[260px]"
+                    }`}
+                    onClick={() => {
+                      setSelectedShowcaseItem(item);
+                      setActiveGalleryImage(item.gallery ? item.gallery[0] : item.image);
+                    }}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-500"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent" />
+
+                    {/* BADGES OVERLAY */}
+                    <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+                      <span className="px-3 py-1 rounded bg-navy-950/80 backdrop-blur text-white text-[10px] font-black uppercase tracking-wider border border-white/10">
+                        {item.tag}
+                      </span>
+                      {item.featured && (
+                        <span className="px-3 py-1 rounded bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider shadow-md">
+                          Featured Design
+                        </span>
+                      )}
+                    </div>
+
+                    {item.gallery && item.gallery.length > 1 && (
+                      <div className="absolute bottom-4 right-4 z-10 bg-navy-950/85 backdrop-blur px-3 py-1.5 rounded-full text-white text-[11px] font-bold flex items-center gap-1.5 border border-white/10">
+                        <Layers className="w-3.5 h-3.5 text-orange-400" />
+                        <span>{item.gallery.length} Camera Views</span>
+                      </div>
+                    )}
+
+                    {item.dimensions && (
+                      <div className="absolute bottom-4 left-4 z-10 text-white text-xs font-extrabold drop-shadow">
+                        <span className="text-orange-400">Scale:</span> {item.dimensions}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="p-5 sm:p-6 bg-white flex-1 flex flex-col justify-between border-t border-slate-100 z-10">
+                    <div>
+                      <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1">
+                        {item.category}
+                      </span>
+                      <h4 className="text-base sm:text-xl font-bold text-navy-950 tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors">
+                        {item.title}
+                      </h4>
+                      <p className="text-xs text-navy-900/65 mt-2 line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-3 pt-4 mt-3 border-t border-slate-100">
+                      <button
+                        onClick={() => {
+                          setSelectedShowcaseItem(item);
+                          setActiveGalleryImage(item.gallery ? item.gallery[0] : item.image);
+                        }}
+                        className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1.5 transition-colors"
+                      >
+                        <Eye className="w-4 h-4" /> View Specs & Gallery
+                      </button>
+                      <button
+                        onClick={() => triggerQuickWhatsApp(`Inquiry on ${item.title}`)}
+                        className="px-3.5 py-1.5 bg-navy-50 text-navy-950 hover:bg-orange-500 hover:text-white rounded text-[11px] font-bold transition-all flex items-center gap-1"
+                      >
+                        Inquire <ArrowUpRight className="w-3 h-3" />
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
           </div>
         </div>
       </section>
@@ -700,6 +865,122 @@ export default function HomePage() {
                   {reviewSubmitted ? <><Check className="w-5 h-5" /> Review Posted!</> : <><Send className="w-4 h-4" /> Submit Review</>}
                 </button>
               </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* SHOWCASE DETAIL MODAL */}
+      <AnimatePresence>
+        {selectedShowcaseItem && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setSelectedShowcaseItem(null)}
+              className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 15 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 15 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl border border-slate-100 z-10 max-h-[92vh] overflow-y-auto"
+            >
+              <button
+                onClick={() => setSelectedShowcaseItem(null)}
+                className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all z-20 bg-white/80 backdrop-blur shadow-sm"
+              >
+                <X className="w-5 h-5" />
+              </button>
+
+              {/* MAIN MEDIA PREVIEW */}
+              <div className="relative w-full h-[260px] sm:h-[400px] bg-slate-900">
+                <Image
+                  src={activeGalleryImage || selectedShowcaseItem.image}
+                  alt={selectedShowcaseItem.title}
+                  fill
+                  className="object-contain"
+                  priority
+                />
+              </div>
+
+              {/* GALLERY THUMBNAILS IF APPLICABLE */}
+              {selectedShowcaseItem.gallery && selectedShowcaseItem.gallery.length > 1 && (
+                <div className="p-3 bg-slate-100 border-b border-slate-200 flex gap-2.5 overflow-x-auto">
+                  {selectedShowcaseItem.gallery.map((img, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveGalleryImage(img)}
+                      className={`relative w-20 h-14 sm:w-24 sm:h-16 rounded-md overflow-hidden shrink-0 transition-all border-2 ${
+                        (activeGalleryImage || selectedShowcaseItem.image) === img
+                          ? "border-orange-500 scale-105 shadow-md"
+                          : "border-transparent opacity-70 hover:opacity-100"
+                      }`}
+                    >
+                      <Image src={img} alt={`Angle View ${idx + 1}`} fill className="object-cover" />
+                      <span className="absolute bottom-1 right-1 text-[9px] font-black bg-navy-950/80 text-white px-1 rounded">
+                        0{idx + 1}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* MODAL CONTENT */}
+              <div className="p-5 sm:p-7 space-y-5">
+                <div>
+                  <div className="flex flex-wrap items-center gap-2 mb-2">
+                    <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest">
+                      {selectedShowcaseItem.category}
+                    </span>
+                    {selectedShowcaseItem.dimensions && (
+                      <span className="text-xs px-2.5 py-0.5 rounded bg-slate-100 text-navy-900 font-bold">
+                        {selectedShowcaseItem.dimensions}
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-navy-950 tracking-tight">
+                    {selectedShowcaseItem.title}
+                  </h3>
+                  <p className="text-xs sm:text-sm text-navy-900/70 mt-2 leading-relaxed">
+                    {selectedShowcaseItem.description}
+                  </p>
+                </div>
+
+                {/* SPECS LIST */}
+                {selectedShowcaseItem.specs && selectedShowcaseItem.specs.length > 0 && (
+                  <div className="border border-slate-200 rounded-xl overflow-hidden bg-slate-50/50">
+                    <div className="px-4 py-2.5 bg-slate-100/80 border-b border-slate-200 text-xs font-bold text-navy-950 uppercase tracking-wider">
+                      Technical & Structural Specifications
+                    </div>
+                    <div className="divide-y divide-slate-200/80 text-xs">
+                      {selectedShowcaseItem.specs.map((spec, sIdx) => (
+                        <div key={sIdx} className="grid grid-cols-1 sm:grid-cols-3 p-3 gap-1">
+                          <span className="font-bold text-navy-900/70">{spec.label}</span>
+                          <span className="sm:col-span-2 text-navy-950 font-medium">{spec.value}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-3">
+                  <span className="text-xs text-navy-900/60 font-medium">
+                    Have a similar commercial site, plot or café space to design?
+                  </span>
+                  <button
+                    onClick={() => {
+                      triggerQuickWhatsApp(`Inquiry regarding ${selectedShowcaseItem.title}`);
+                      setSelectedShowcaseItem(null);
+                    }}
+                    className="w-full sm:w-auto px-6 py-3 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95"
+                  >
+                    Consult Engineer On WhatsApp <ArrowUpRight className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
             </motion.div>
           </div>
         )}
