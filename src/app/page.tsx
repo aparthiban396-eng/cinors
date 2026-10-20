@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -28,7 +28,9 @@ import {
   MessageSquare,
   Star,
   Send,
-  Eye
+  Eye,
+  Play,
+  Film
 } from "lucide-react";
 
 interface ServiceCard { icon: React.ReactNode; title: string; description: string; }
@@ -42,6 +44,7 @@ interface ShowcaseItem {
   tag: "Commercial" | "Residential" | "Interior";
   image: string;
   gallery?: string[];
+  video?: string;
   dimensions?: string;
   description: string;
   specs?: ShowcaseSpec[];
@@ -50,6 +53,171 @@ interface ShowcaseItem {
 interface Testimonial { quote: string; author: string; role: string; location: string; }
 interface FAQItem { question: string; answer: string; }
 interface Review { name: string; location: string; rating: number; comment: string; date: string; }
+
+const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
+  item,
+  index,
+  isAutoplayEnabled,
+  onOpenModal,
+  onInquire,
+}: {
+  item: ShowcaseItem;
+  index: number;
+  isAutoplayEnabled: boolean;
+  onOpenModal: (item: ShowcaseItem, activeImg?: string) => void;
+  onInquire: (title: string) => void;
+}) {
+  const [activeImgIndex, setActiveImgIndex] = useState(0);
+
+  // Staggered timing per card so every project switches at different times:
+  // Each card receives a distinct cycle duration and a different initial delay offset
+  const intervalDurations = [3200, 4200, 3600, 4800, 3900, 3400];
+  const initialOffsets = [300, 1600, 2900, 900, 2200, 1300];
+  const cardInterval = intervalDurations[index % intervalDurations.length];
+  const cardInitialDelay = initialOffsets[index % initialOffsets.length];
+
+  const gallery = item.gallery;
+  const galleryLength = gallery?.length || 0;
+
+  useEffect(() => {
+    if (!isAutoplayEnabled || galleryLength <= 1) {
+      return;
+    }
+
+    let intervalId: NodeJS.Timeout;
+    const timeoutId = setTimeout(() => {
+      setActiveImgIndex((prev) => (prev + 1) % galleryLength);
+      intervalId = setInterval(() => {
+        setActiveImgIndex((prev) => (prev + 1) % galleryLength);
+      }, cardInterval);
+    }, cardInitialDelay);
+
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
+  }, [isAutoplayEnabled, galleryLength, cardInterval, cardInitialDelay]);
+
+  const currentImg =
+    isAutoplayEnabled && gallery && gallery.length > 0
+      ? gallery[activeImgIndex % gallery.length]
+      : item.image;
+
+  return (
+    <motion.div
+      whileHover={{ y: -5 }}
+      className="group rounded-xl overflow-hidden shadow-lg border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl flex flex-col h-full relative transition-all"
+    >
+      <div
+        className="relative w-full h-[220px] sm:h-[260px] cursor-pointer overflow-hidden bg-slate-900"
+        onClick={() => onOpenModal(item, currentImg)}
+      >
+        {isAutoplayEnabled && item.video ? (
+          <video
+            src={item.video}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="object-cover w-full h-full pointer-events-none"
+          />
+        ) : (
+          <AnimatePresence mode="popLayout">
+            <motion.div
+              key={currentImg}
+              initial={{ opacity: 0, scale: 1.06 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.75, ease: "easeInOut" }}
+              className="absolute inset-0 w-full h-full"
+            >
+              <Image
+                src={currentImg}
+                alt={item.title}
+                fill
+                className="object-cover group-hover:scale-105 transition-all duration-700"
+                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              />
+            </motion.div>
+          </AnimatePresence>
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent pointer-events-none z-10" />
+
+        {/* BADGES OVERLAY */}
+        <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+          <span className="px-3 py-1 rounded bg-navy-950/80 backdrop-blur text-white text-[10px] font-black uppercase tracking-wider border border-white/10">
+            {item.tag}
+          </span>
+          {item.featured && (
+            <span className="px-3 py-1 rounded bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider shadow-md">
+              Featured
+            </span>
+          )}
+          {item.video && (
+            <span className="px-2.5 py-1 rounded bg-red-600/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-wider shadow-md flex items-center gap-1">
+              <Play className="w-2.5 h-2.5 fill-white" /> {isAutoplayEnabled ? "Playing" : "Video"}
+            </span>
+          )}
+        </div>
+
+        {item.video && !isAutoplayEnabled && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
+            <div className="w-12 h-12 rounded-full bg-orange-500/90 text-white flex items-center justify-center shadow-xl backdrop-blur-xs group-hover:scale-110 transition-transform">
+              <Play className="w-5 h-5 fill-white translate-x-0.5" />
+            </div>
+          </div>
+        )}
+
+        {item.gallery && item.gallery.length > 1 && (
+          <div className="absolute bottom-4 right-4 z-10 bg-navy-950/85 backdrop-blur px-3 py-1.5 rounded-full text-white text-[11px] font-bold flex items-center gap-1.5 border border-white/10">
+            <Layers className="w-3.5 h-3.5 text-orange-400" />
+            <span>
+              {isAutoplayEnabled
+                ? `View ${(activeImgIndex % item.gallery.length) + 1}/${item.gallery.length}`
+                : `${item.gallery.length} Views`}
+            </span>
+          </div>
+        )}
+
+        {item.dimensions && (
+          <div className="absolute bottom-4 left-4 z-10 text-white text-xs font-extrabold drop-shadow">
+            <span className="text-orange-400">Scale:</span> {item.dimensions}
+          </div>
+        )}
+      </div>
+
+      <div className="p-5 sm:p-6 bg-white flex-1 flex flex-col justify-between border-t border-slate-100 z-10">
+        <div>
+          <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1 line-clamp-1">
+            {item.category}
+          </span>
+          <h4 className="text-base sm:text-lg font-bold text-navy-950 tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors">
+            {item.title}
+          </h4>
+          <p className="text-xs text-navy-900/65 mt-2 line-clamp-2 leading-relaxed min-h-[2.5rem]">
+            {item.description}
+          </p>
+        </div>
+
+        <div className="flex items-center justify-between gap-3 pt-4 mt-3 border-t border-slate-100">
+          <button
+            onClick={() => onOpenModal(item, currentImg)}
+            className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1.5 transition-colors"
+          >
+            {item.video ? <Play className="w-3.5 h-3.5 fill-current" /> : <Eye className="w-4 h-4" />}
+            {item.video ? "Watch Walkthrough" : "View Specs & Gallery"}
+          </button>
+          <button
+            onClick={() => onInquire(`Inquiry on ${item.title}`)}
+            className="px-3.5 py-1.5 bg-navy-50 text-navy-950 hover:bg-orange-500 hover:text-white rounded text-[11px] font-bold transition-all flex items-center gap-1"
+          >
+            Inquire <ArrowUpRight className="w-3 h-3" />
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+});
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +231,31 @@ export default function HomePage() {
   const [hoverRating, setHoverRating] = useState(0);
   const [selectedShowcaseItem, setSelectedShowcaseItem] = useState<ShowcaseItem | null>(null);
   const [activeGalleryImage, setActiveGalleryImage] = useState<string>("");
+  const [showVideoPlayer, setShowVideoPlayer] = useState<boolean>(false);
   const [activeShowcaseTag, setActiveShowcaseTag] = useState<string>("All");
+  const [isAutoplayEnabled, setIsAutoplayEnabled] = useState<boolean>(true);
+
+  const handleOpenShowcaseModal = useCallback((item: ShowcaseItem, activeImg?: string) => {
+    setSelectedShowcaseItem(item);
+    setShowVideoPlayer(Boolean(item.video));
+    setActiveGalleryImage(activeImg || (item.gallery ? item.gallery[0] : item.image));
+  }, []);
+
+  // When modal is open in photo mode with autoplay enabled, advance gallery photos
+  useEffect(() => {
+    if (!isAutoplayEnabled || !selectedShowcaseItem || showVideoPlayer) return;
+    const gallery = selectedShowcaseItem.gallery;
+    if (gallery && gallery.length > 1) {
+      const interval = setInterval(() => {
+        setActiveGalleryImage((prev) => {
+          const currentIdx = gallery.indexOf(prev);
+          const nextIdx = currentIdx === -1 ? 1 : (currentIdx + 1) % gallery.length;
+          return gallery[nextIdx];
+        });
+      }, 3500);
+      return () => clearInterval(interval);
+    }
+  }, [isAutoplayEnabled, selectedShowcaseItem, showVideoPlayer]);
 
   const [reviews, setReviews] = useState<Review[]>([
     { name: "Praveen Kumar", location: "Trichy", rating: 5, comment: "I bought a 2400 sq.ft plot and was confused about how to structure it. CINORS gave us a Vastu-friendly 2D layout and a beautiful 3D elevation. Our contractor easily followed their construction-ready structural drawings.", date: "March 2024" },
@@ -77,9 +269,52 @@ export default function HomePage() {
     name: "", phone: "", location: "", plotSize: "", stage: "Bought a Plot & Planning",
   });
 
+  const [inlineFormData, setInlineFormData] = useState({
+    name: "", phone: "", location: "", plotSize: "", service: "Complete Package", stage: "Bought a Plot & Planning",
+  });
+  const [inlineFormSubmitted, setInlineFormSubmitted] = useState(false);
+
   const sliderRef = useRef<HTMLDivElement>(null);
 
-  // FIX 1: Proper drag logic with mousedown/mouseup tracking
+  const [isUserActive, setIsUserActive] = useState(false);
+  const userIdleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const phaseRef = useRef(0);
+  const animFrameRef = useRef<number | null>(null);
+
+  // Auto-slide back and forth with creative sinusoidal oscillation
+  useEffect(() => {
+    let lastTime = performance.now();
+
+    const animateSlider = (currentTime: number) => {
+      const delta = Math.min((currentTime - lastTime) / 1000, 0.1);
+      lastTime = currentTime;
+
+      // Only auto-slide when the user is not actively dragging or interacting
+      if (!isDragging && !isUserActive) {
+        // Complete cycle in ~6.5 seconds (0.95 rad/sec)
+        phaseRef.current += 0.95 * delta;
+        // Oscillate smoothly between 22% and 78% (amplitude: 28%)
+        const targetPos = 50 + 28 * Math.sin(phaseRef.current);
+
+        setSliderPosition((prev) => {
+          const diff = targetPos - prev;
+          if (Math.abs(diff) < 0.05) return targetPos;
+          // Smooth lerp to avoid abrupt jumps when resuming from user drag
+          return prev + diff * Math.min(1, delta * 3.2);
+        });
+      }
+
+      animFrameRef.current = requestAnimationFrame(animateSlider);
+    };
+
+    animFrameRef.current = requestAnimationFrame(animateSlider);
+
+    return () => {
+      if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
+    };
+  }, [isDragging, isUserActive]);
+
+  // Drag interaction logic with mousedown/mouseup tracking
   const handleMove = (clientX: number) => {
     if (!sliderRef.current) return;
     const rect = sliderRef.current.getBoundingClientRect();
@@ -88,8 +323,20 @@ export default function HomePage() {
     setSliderPosition(percentage);
   };
 
-  const handleMouseDown = () => setIsDragging(true);
-  const handleMouseUp = () => setIsDragging(false);
+  const handleStartInteraction = () => {
+    setIsDragging(true);
+    setIsUserActive(true);
+    if (userIdleTimerRef.current) clearTimeout(userIdleTimerRef.current);
+  };
+
+  const handleEndInteraction = () => {
+    setIsDragging(false);
+    if (userIdleTimerRef.current) clearTimeout(userIdleTimerRef.current);
+    // Pause auto-sweep for 2.2s after interaction, then gently resume
+    userIdleTimerRef.current = setTimeout(() => {
+      setIsUserActive(false);
+    }, 2200);
+  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (isDragging) handleMove(e.clientX);
@@ -101,7 +348,7 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    const onUp = () => setIsDragging(false);
+    const onUp = () => handleEndInteraction();
     window.addEventListener("mouseup", onUp);
     return () => window.removeEventListener("mouseup", onUp);
   }, []);
@@ -110,7 +357,7 @@ export default function HomePage() {
     e.preventDefault();
     setFormSubmitted(true);
     const message = `Hi CINORS,\nI would like to get a Free Consultation for my plot. Here are my details:\n• Name: ${formData.name}\n• Phone: ${formData.phone}\n• Plot Location: ${formData.location}\n• Plot Size: ${formData.plotSize}\n• Current Stage: ${formData.stage}\n\nPlease guide me on the next steps. Thank you!`;
-    const whatsappUrl = `https://wa.me/919876500000?text=${encodeURIComponent(message)}`;
+    const whatsappUrl = `https://wa.me/918248768635?text=${encodeURIComponent(message)}`;
     setTimeout(() => {
       window.open(whatsappUrl, "_blank");
       setIsModalOpen(false);
@@ -139,10 +386,10 @@ export default function HomePage() {
     }, 1800);
   };
 
-  const triggerQuickWhatsApp = (context: string) => {
+  const triggerQuickWhatsApp = useCallback((context: string) => {
     const message = `Hi CINORS, I am interested in your ${context}. I would like to schedule a free consultation for my house planning.`;
-    window.open(`https://wa.me/919876500000?text=${encodeURIComponent(message)}`, "_blank");
-  };
+    window.open(`https://wa.me/918248768635?text=${encodeURIComponent(message)}`, "_blank");
+  }, []);
 
   const trustCards: TrustCard[] = [
     { title: "Professional Planning", icon: <Ruler className="w-6 h-6 text-orange-500" />, desc: "Optimized and standard layouts designed by qualified engineers." },
@@ -169,10 +416,10 @@ export default function HomePage() {
     { step: "04", title: "Start Construction with Confidence", description: "Hand over the professional drawings to your builders to avoid site errors and costly reworks." },
   ];
 
-  const showcaseItems: ShowcaseItem[] = [
+  const showcaseItems: ShowcaseItem[] = useMemo(() => [
     {
       id: "tensile-canopy",
-      title: "Proposed Tensile Canopy (10m x 5m) for Coffee Shop",
+      title: "Coffee Shop Tensile Canopy",
       category: "Commercial Architecture & Tensile Structures",
       tag: "Commercial",
       image: "/images/tensile-canopy-1.jpg",
@@ -220,32 +467,78 @@ export default function HomePage() {
       ],
     },
     {
-      id: "commercial-parking-canopy",
-      title: "Commercial Vehicle Parking Canopies (Car: 50m x 7m | Bike: 25m x 7m)",
-      category: "Industrial & Commercial Parking Structures",
-      tag: "Commercial",
-      image: "/images/parking-tensile-overview.jpg",
+      id: "g1-residential-elevation",
+      title: "Contemporary G+1 Residential Elevation",
+      category: "Residential Architecture & 3D Elevation",
+      tag: "Residential",
+      image: "/images/residential-g1-front.jpg",
       gallery: [
-        "/images/parking-tensile-overview.jpg",
-        "/images/parking-tensile-car.jpg",
-        "/images/parking-gi-overview.jpg",
-        "/images/parking-gi-bike.jpg",
+        "/images/residential-g1-front.jpg",
+        "/images/residential-g1-perspective.jpg",
+        "/images/g1-residence-floorplan.jpg",
       ],
-      dimensions: "Car: 50m x 7m (350 m²) | Bike: 25m x 7m (175 m²)",
-      description: "Complete structural design and 3D architectural visualization for commercial car (50m x 7m, ~20 cars) and two-wheeler (25m x 7m, ~50 bikes) parking bays, engineered in both architectural Tensile Fabric Membrane and Pre-coated GI Profile Sheet options.",
+      dimensions: "8.0m x 17.0m (195 m² / ~2,100 sq.ft Total Built-Up)",
+      description: "A striking G+1 independent residential building designed on a compact 8m x 17m plot, featuring a bold mix of geometric facade elements — vertical wooden-finish cladding, sculpted red and grey accent panels, decorative jali screens, and contrasting warm-neutral tones. The design maximizes street presence with staggered massing, a covered car porch with wooden-finish gates, and a functional open terrace on the first floor ideal for relaxation or future vertical expansion.",
       specs: [
-        { label: "Car Parking Footprint", value: "50.0m x 7.0m (350 m² / ~3,767 sq.ft) — Capacity ~18-20 Cars" },
-        { label: "Bike Parking Footprint", value: "25.0m x 7.0m (175 m² / ~1,883 sq.ft) — Capacity ~45-50 Two-Wheelers" },
-        { label: "Structural Framework", value: "Central ladder-truss tubular steel columns with dual-curved cantilevered arch wings" },
-        { label: "Roofing Option 1 (Tensile)", value: "UV-stabilized architectural PVDF membrane (self-cleaning, natural diffuse daylight)" },
-        { label: "Roofing Option 2 (GI)", value: "Pre-coated Galvalume / GI profile roofing sheets in industrial blue (high durability & weatherproofing)" },
-        { label: "Foundation & Safety", value: "Heavy-duty baseplate anchor system with isolated RCC pedestal footings for wind-moment resistance" },
+        { label: "Plot Footprint", value: "8.0m x 17.0m (136 m²)" },
+        { label: "Building Type", value: "G+1 Independent Residential Dwelling" },
+        { label: "Total Built-Up Area", value: "195 m² / ~2,100 sq.ft (Ground + First Floor)" },
+        { label: "Floors", value: "Ground Floor + First Floor with open terrace & staircase headroom" },
+        { label: "Elevation Style", value: "Contemporary with geometric accent panels, vertical cladding & jali screens" },
+        { label: "Key Features", value: "Covered car parking, decorative brick-finish gate pillars, cross-ventilated rooms, first-floor balcony & open terrace" },
+        { label: "Facade Materials", value: "Exterior plastered walls, wooden-texture ACP cladding, perforated terracotta jali, natural stone dado at base" },
       ],
       featured: true,
     },
     {
+      id: "residential-stilt-canopy",
+      title: "Residential Stilt Parking Canopy",
+      category: "Tensile Architecture & Parking Canopies",
+      tag: "Residential",
+      image: "/images/residential-stilt-canopy-front.jpg",
+      gallery: [
+        "/images/residential-stilt-canopy-front.jpg",
+        "/images/residential-stilt-canopy-driveway.jpg",
+        "/images/residential-stilt-canopy-angle.jpg",
+        "/images/residential-stilt-canopy-aerial.jpg",
+      ],
+      dimensions: "Modular Cantilever Driveway Span",
+      description: "Architectural cantilevered tensile membrane canopy engineered for residential apartment stilt-floor driveways and parking bays. Designed with seamless wall-anchored steel cantilever trusses and high-durability white PVDF fabric, it provides comprehensive sun and rain protection for vehicles while preserving clear driveway circulation without obstructing ground posts.",
+      specs: [
+        { label: "Canopy Type", value: "Cantilevered Arch Tensile Membrane Canopy" },
+        { label: "Application", value: "Apartment Stilt Floor & Driveway Vehicle Parking" },
+        { label: "Membrane Material", value: "Architectural PVDF Tensile Fabric (UV-proof, Heat Deflective & Water Repellent)" },
+        { label: "Frame & Structure", value: "Precision-curved tubular steel cantilever rafters anchored to RCC stilt columns" },
+        { label: "Clearance Design", value: "Post-free outer edge ensuring zero driveway obstruction for smooth turning radii" },
+        { label: "Drainage & Safety", value: "Pre-sloped profile for directed storm runoff & engineered wind load dissipation" },
+      ],
+      featured: true,
+    },
+    {
+      id: "enscape-walkthrough-video",
+      title: "Enscape 3D Walkthrough Video",
+      category: "3D Animation & Virtual Walkthrough",
+      tag: "Residential",
+      image: "/images/enscape-video-thumb.jpg",
+      video: "/videos/enscape-walkthrough-web.mp4",
+      gallery: [
+        "/images/enscape-video-thumb.jpg",
+      ],
+      dimensions: "Full HD Cinematic Walkthrough (01:53)",
+      description: "Photorealistic Enscape 3D cinematic walkthrough exploring the residential apartment stilt-floor canopy architecture, cantilevered parking bays, lighting conditions, and vehicular circulation in real-time.",
+      specs: [
+        { label: "Rendering Engine", value: "Enscape Real-Time Architectural Visualizer" },
+        { label: "Walkthrough Scope", value: "Stilt-floor canopy, driveway navigation, lighting & parked vehicles" },
+        { label: "Runtime Duration", value: "1 Minute 53 Seconds (Smooth Cinema FPS)" },
+        { label: "Project Focus", value: "Pre-construction client spatial walkthrough & structural review" },
+        { label: "Engineering Scope", value: "Driveway clearance, cantilever roof behavior & aesthetic coordination" },
+      ],
+      featured: true,
+    },
+
+    {
       id: "catenary-car-parking",
-      title: "Catenary Tensile Car Parking Canopy (12m x 6m)",
+      title: "Catenary Tensile Parking Canopy",
       category: "Modern Tensile Parking Structures",
       tag: "Commercial",
       image: "/images/catenary-car-parking-front.jpg",
@@ -268,6 +561,30 @@ export default function HomePage() {
       featured: true,
     },
     {
+      id: "3car-flat-carport",
+      title: "3-Car Flat Roof Carport",
+      category: "Residential Parking Canopy",
+      tag: "Residential",
+      image: "/images/carport-3car-front.jpg",
+      gallery: [
+        "/images/carport-3car-front.jpg",
+        "/images/carport-3car-angle.jpg",
+        "/images/carport-3car-side.jpg",
+        "/images/carport-3car-aerial.jpg",
+      ],
+      dimensions: "32' x 21' (672 sq.ft / ~62.4 m²)",
+      description: "A premium 3-car residential parking canopy with a sleek flat roof profile, ornamental gold geometric lattice brackets, and a minimalist steel frame — designed to complement modern villa and bungalow facades.",
+      specs: [
+        { label: "Plot Footprint", value: "32.0ft x 21.0ft (672 sq.ft / ~62.4 m²) — 3-Car Capacity" },
+        { label: "Roof Profile", value: "Flat cantilever roof with concealed drain channel" },
+        { label: "Structural Columns", value: "Square hollow section (SHS) steel columns with decorative gold geometric lattice corbel brackets" },
+        { label: "Roofing Material", value: "Pre-coated metal sheet / ACP panel in matte white finish" },
+        { label: "Flooring Shown", value: "Grass-joint interlocking paver blocks (client-supplied)" },
+        { label: "Design Style", value: "Contemporary minimalist — suits modern villas & bungalows" },
+      ],
+      featured: true,
+    },
+    {
       id: "interior-design",
       title: "Luxury Lounge Interior Concept",
       category: "Interior Design",
@@ -280,7 +597,7 @@ export default function HomePage() {
         { label: "Key Features", value: "Concealed cabinetry, modular spatial division, ambient cove lighting" },
       ],
     },
-  ];
+  ], []);
 
   const faqs: FAQItem[] = [
     { question: "How much does house planning cost?", answer: "Our planning packages are extremely affordable and depend on your plot size and scope. Contact us with your dimensions for a custom, transparent quote." },
@@ -309,6 +626,7 @@ export default function HomePage() {
             <a href="#why-us" className="hover:text-orange-500 transition-colors">Why Us</a>
             <a href="#process" className="hover:text-orange-500 transition-colors">Process</a>
             <a href="#showcase" className="hover:text-orange-500 transition-colors">Showcase</a>
+            <a href="#get-quote" className="hover:text-orange-500 transition-colors">Get Quote</a>
             <a href="#reviews" className="hover:text-orange-500 transition-colors">Reviews</a>
             <a href="#faq" className="hover:text-orange-500 transition-colors">FAQ</a>
           </nav>
@@ -325,7 +643,7 @@ export default function HomePage() {
           {isMenuOpen && (
             <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} transition={{ duration: 0.2 }} className="md:hidden border-t border-navy-50 bg-white shadow-xl overflow-hidden">
               <div className="px-4 pt-3 pb-6 flex flex-col gap-2">
-                {["services", "why-us", "process", "showcase", "reviews", "faq"].map((id) => (
+                {["services", "why-us", "process", "showcase", "get-quote", "reviews", "faq"].map((id) => (
                   <a key={id} href={`#${id}`} onClick={() => setIsMenuOpen(false)} className="px-3 py-2.5 text-[15px] font-medium text-navy-900 hover:bg-navy-50 rounded-md transition-colors capitalize">
                     {id === "why-us" ? "Why Choose Us" : id.charAt(0).toUpperCase() + id.slice(1)}
                   </a>
@@ -382,11 +700,11 @@ export default function HomePage() {
             <div
               ref={sliderRef}
               onMouseMove={handleMouseMove}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
+              onMouseDown={handleStartInteraction}
+              onMouseUp={handleEndInteraction}
               onTouchMove={handleTouchMove}
-              onTouchStart={handleMouseDown}
-              onTouchEnd={handleMouseUp}
+              onTouchStart={handleStartInteraction}
+              onTouchEnd={handleEndInteraction}
               className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl border-4 border-white select-none cursor-ew-resize"
               style={{ touchAction: "none" }}
             >
@@ -423,22 +741,26 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* SLIDER HANDLE */}
+              {/* SLIDER HANDLE & LASER SCAN LINE */}
               <div
-                className="absolute top-0 bottom-0 w-1 bg-white z-20 pointer-events-none"
+                className="absolute top-0 bottom-0 w-1 bg-white z-20 pointer-events-none shadow-[0_0_14px_rgba(249,115,22,0.85)]"
                 style={{ left: `${sliderPosition}%` }}
               >
-                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-white shadow-xl border-2 border-orange-500 flex items-center justify-center pointer-events-auto cursor-ew-resize hover:scale-110 active:scale-95 transition-all">
-                  <div className="flex gap-0.5">
-                    <span className="text-orange-500 font-black text-xs">&lt;</span>
-                    <span className="text-orange-500 font-black text-xs">&gt;</span>
+                {/* Glowing laser scan beam */}
+                <div className="absolute inset-0 bg-gradient-to-b from-orange-500 via-white to-orange-500 opacity-90 animate-pulse" />
+
+                {/* Handle Knob */}
+                <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-11 h-11 rounded-full bg-white shadow-2xl border-2 border-orange-500 flex items-center justify-center pointer-events-auto cursor-ew-resize hover:scale-115 active:scale-95 transition-all">
+                  {/* Outer pulsating radar ring while auto-sliding */}
+                  {!isDragging && !isUserActive && (
+                    <div className="absolute -inset-2 rounded-full bg-orange-500/30 animate-ping pointer-events-none" />
+                  )}
+                  <div className="flex items-center gap-0.5 text-orange-500 font-black text-xs select-none">
+                    <span>&lt;</span>
+                    <span className="w-1 h-3 bg-orange-500/30 rounded-full mx-0.5" />
+                    <span>&gt;</span>
                   </div>
                 </div>
-              </div>
-
-              <div className="absolute top-4 left-1/2 -translate-x-1/2 bg-navy-950/85 text-white px-4 py-1.5 rounded-full text-xs font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-xs pointer-events-none z-30">
-                <span>Drag Slider To Visualize</span>
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-ping" />
               </div>
             </div>
           </div>
@@ -501,36 +823,121 @@ export default function HomePage() {
             <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">Correcting architectural or structural errors during building is 10x more expensive.</p>
           </div>
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
-            <div className="lg:col-span-6 space-y-5">
-              <h4 className="text-lg font-bold text-red-600 flex items-center gap-2 mb-2"><AlertTriangle className="w-5 h-5" /> Critical Risks of Unplanned Construction</h4>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { title: "Wrong Room Layouts", desc: "Poor placement affecting ventilation, light, and privacy." },
-                  { title: "Wasted Space", desc: "Inefficient zoning leading to unused dark corners and passages." },
-                  { title: "Structural Errors", desc: "Weak foundations and misaligned beams cause building cracks." },
-                  { title: "Unexpected Costs", desc: "Improper estimations leading to material over-ordering or budget overrun." },
-                ].map((r, i) => (
-                  <div key={i} className="p-4 rounded-lg bg-red-50/50 border border-red-100 flex items-start gap-3">
-                    <div className="w-1.5 h-1.5 rounded-full bg-red-500 mt-2 shrink-0" />
-                    <div><h5 className="font-bold text-sm text-navy-950">{r.title}</h5><p className="text-[11px] text-navy-900/60">{r.desc}</p></div>
-                  </div>
-                ))}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
+            {/* LEFT CARD: CRITICAL RISKS */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-red-50/40 border border-red-200/90 relative overflow-hidden flex flex-col justify-between h-full shadow-xs">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[radial-gradient(circle_at_top_right,rgba(239,68,68,0.12),transparent_65%)] pointer-events-none" />
+              <div>
+                <span className="px-3 py-1 rounded bg-red-600 text-white font-bold text-[10px] uppercase tracking-wider inline-flex items-center gap-1.5">
+                  <AlertTriangle className="w-3 h-3" /> The Expensive Risks
+                </span>
+                <h4 className="text-xl sm:text-2xl font-black text-navy-950 mt-4 mb-3 tracking-tight leading-snug">
+                  Critical Risks of Unplanned Construction
+                </h4>
+                <p className="text-xs sm:text-sm text-navy-900/70 mb-6 leading-relaxed">
+                  Building without verified engineering drawings leads to unfixable structural defects, wasted living areas, and huge budget overruns.
+                </p>
+                <div className="space-y-3.5">
+                  {[
+                    {
+                      title: "Weak Foundations & Structural Cracks",
+                      desc: "Uncalculated column spans and incorrect reinforcement cause building cracks and slab sagging.",
+                    },
+                    {
+                      title: "Defective Room Layouts & Dark Zones",
+                      desc: "Poor spatial zoning compromises cross-ventilation, natural sunlight, and family privacy.",
+                    },
+                    {
+                      title: "Wasted Plot Space & Dead Passages",
+                      desc: "Inefficient circulation routes create dark unusable corners while inflating square-foot costs.",
+                    },
+                    {
+                      title: "Unexpected Material & Budget Overruns",
+                      desc: "Blind contractor estimations result in 15% to 25% budget overshoots and costly site reworks.",
+                    },
+                  ].map((risk, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white/90 border border-red-100 shadow-xs">
+                      <div className="w-5 h-5 rounded-full bg-red-100 text-red-600 flex items-center justify-center shrink-0 mt-0.5">
+                        <X className="w-3.5 h-3.5 stroke-[2.5]" />
+                      </div>
+                      <div>
+                        <h5 className="font-bold text-xs sm:text-sm text-navy-950 leading-tight">{risk.title}</h5>
+                        <p className="text-[11px] text-navy-900/60 mt-0.5 leading-snug">{risk.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-7 pt-6 border-t border-red-200/70 flex items-center justify-between gap-4 flex-wrap bg-red-100/40 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 p-4 sm:p-5 rounded-b-2xl">
+                <div className="flex items-center gap-2 text-xs font-bold text-red-700">
+                  <AlertTriangle className="w-4 h-4 text-red-600 shrink-0" />
+                  <span>Site Modification Penalty:</span>
+                </div>
+                <span className="text-xs font-black text-red-700 bg-white px-2.5 py-1 rounded border border-red-200 shadow-xs">
+                  10x Higher Than Pre-Planning
+                </span>
               </div>
             </div>
-            <div className="lg:col-span-6 p-6 sm:p-8 rounded-2xl bg-navy-950 text-white relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.15),transparent_60%)] pointer-events-none" />
-              <span className="px-3 py-1 rounded bg-orange-500 text-white font-bold text-[10px] uppercase tracking-wider">The Engineering Solution</span>
-              <h4 className="text-xl sm:text-2xl font-black mt-4 mb-4 tracking-tight leading-snug">CINORS Helps You Build With Confidence</h4>
-              <p className="text-sm text-navy-100/70 mb-6 leading-relaxed">By providing clear 2D layouts, load-calculated structural drawings, and fully documented construction guides, we secure your building process from Day 1.</p>
-              <ul className="space-y-3">
-                {["100% Correct Vastu & Direction Alignment", "Column & Foundation Steel Detailing for Safety", "Pre-defined Material Estimations to save up to 15%", "Approved drawings ready for local municipal submission"].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3"><CheckCircle2 className="w-5 h-5 text-orange-500 shrink-0" /><span className="text-sm font-semibold">{item}</span></li>
-                ))}
-              </ul>
-              <div className="mt-7 pt-6 border-t border-white/10 flex items-center justify-between gap-4 flex-wrap">
-                <button onClick={() => setIsModalOpen(true)} className="px-6 py-3 bg-orange-500 text-white text-sm font-bold rounded-md hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95">Consult An Engineer</button>
-                <div className="text-right"><span className="text-orange-500 block font-bold text-xs uppercase tracking-wide">Call Support</span><a href="tel:+919876543210" className="font-extrabold text-white text-sm hover:text-orange-400 transition-colors">+91 98765 43210</a></div>
+
+            {/* RIGHT CARD: THE SOLUTION */}
+            <div className="p-6 sm:p-8 rounded-2xl bg-navy-950 text-white relative overflow-hidden flex flex-col justify-between h-full shadow-xl">
+              <div className="absolute top-0 right-0 w-36 h-36 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.18),transparent_65%)] pointer-events-none" />
+              <div>
+                <span className="px-3 py-1 rounded bg-orange-500 text-white font-bold text-[10px] uppercase tracking-wider inline-flex items-center gap-1.5">
+                  <ShieldCheck className="w-3 h-3" /> The Engineering Solution
+                </span>
+                <h4 className="text-xl sm:text-2xl font-black mt-4 mb-3 tracking-tight leading-snug">
+                  CINORS Helps You Build With Confidence
+                </h4>
+                <p className="text-xs sm:text-sm text-navy-100/70 mb-6 leading-relaxed">
+                  By providing clear 2D layouts, load-calculated structural drawings, and fully documented construction guides, we secure your building process from Day 1.
+                </p>
+                <div className="space-y-3.5">
+                  {[
+                    {
+                      title: "100% Vastu & Directional Compliance",
+                      desc: "Scientific room zoning aligned with natural light, wind circulation, and traditional vastu principles.",
+                    },
+                    {
+                      title: "Certified Column & Foundation Detailing",
+                      desc: "Earthquake-resilient structural drawings with steel bar schedules ready for site engineers.",
+                    },
+                    {
+                      title: "Pre-Defined Material & Cost Estimations",
+                      desc: "Eliminates surprise site expenditures and helps save 12% to 15% on overall construction costs.",
+                    },
+                    {
+                      title: "Municipal Approval-Ready Blueprints",
+                      desc: "Complete architectural plan set compliant with local Panchayat and Corporation building norms.",
+                    },
+                  ].map((sol, idx) => (
+                    <div key={idx} className="flex items-start gap-3 p-3 rounded-xl bg-white/5 border border-white/10 shadow-xs">
+                      <div className="w-5 h-5 rounded-full bg-orange-500/20 text-orange-400 flex items-center justify-center shrink-0 mt-0.5">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h5 className="font-bold text-xs sm:text-sm text-white leading-tight">{sol.title}</h5>
+                        <p className="text-[11px] text-navy-100/60 mt-0.5 leading-snug">{sol.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="mt-7 pt-6 border-t border-white/10 flex items-center justify-between gap-4 flex-wrap bg-navy-900/60 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 p-4 sm:p-5 rounded-b-2xl">
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="px-5 py-2.5 bg-orange-500 text-white text-xs sm:text-sm font-bold rounded-md hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95"
+                >
+                  Consult An Engineer
+                </button>
+                <div className="text-right">
+                  <span className="text-orange-400 block font-bold text-[10px] uppercase tracking-wide">Call Support</span>
+                  <a href="tel:+918248768635" className="font-extrabold text-white text-xs sm:text-sm hover:text-orange-400 transition-colors">
+                    +91 82487 68635
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -576,113 +983,187 @@ export default function HomePage() {
             </button>
           </div>
 
-          {/* CATEGORY FILTER TABS */}
-          <div className="flex flex-wrap gap-2 mb-8 sm:mb-10">
-            {["All", "Commercial", "Residential", "Interior"].map((tag) => (
+          {/* CATEGORY FILTER TABS & AUTOPLAY SWITCH */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 sm:mb-10">
+            <div className="flex flex-wrap gap-2">
+              {["All", "Commercial", "Residential", "Interior"].map((tag) => (
+                <button
+                  key={tag}
+                  onClick={() => setActiveShowcaseTag(tag)}
+                  className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
+                    activeShowcaseTag === tag
+                      ? "bg-navy-950 text-white shadow-md shadow-navy-950/20"
+                      : "bg-slate-100 text-navy-900/70 hover:bg-slate-200"
+                  }`}
+                >
+                  {tag === "All" ? "All Projects" : `${tag} Architecture`}
+                </button>
+              ))}
+            </div>
+
+            {/* AUTOPLAY TOGGLE SWITCH */}
+            <div className="flex items-center gap-3 bg-white border border-slate-200 px-4 py-2 rounded-full self-start md:self-auto shadow-xs">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2.5 w-2.5">
+                  {isAutoplayEnabled && (
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75" />
+                  )}
+                  <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${isAutoplayEnabled ? "bg-orange-500" : "bg-slate-300"}`} />
+                </span>
+                <span className="text-xs font-extrabold text-navy-950 tracking-tight">
+                  Autoplay Previews
+                </span>
+              </div>
               <button
-                key={tag}
-                onClick={() => setActiveShowcaseTag(tag)}
-                className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${
-                  activeShowcaseTag === tag
-                    ? "bg-navy-950 text-white shadow-md shadow-navy-950/20"
-                    : "bg-slate-100 text-navy-900/70 hover:bg-slate-200"
+                type="button"
+                role="switch"
+                aria-checked={isAutoplayEnabled}
+                onClick={() => setIsAutoplayEnabled(!isAutoplayEnabled)}
+                className={`relative inline-flex h-6 w-11 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none ${
+                  isAutoplayEnabled ? "bg-orange-500" : "bg-slate-300"
                 }`}
               >
-                {tag === "All" ? "All Projects" : `${tag} Architecture`}
+                <span className="sr-only">Toggle autoplay previews</span>
+                <span
+                  className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                    isAutoplayEnabled ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
               </button>
-            ))}
+            </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {showcaseItems
               .filter((item) => activeShowcaseTag === "All" || item.tag === activeShowcaseTag)
-              .map((item) => (
-                <motion.div
+              .map((item, index) => (
+                <ShowcaseCardItem
                   key={item.id}
-                  whileHover={{ y: -5 }}
-                  className={`group rounded-xl overflow-hidden shadow-lg border flex flex-col relative transition-all ${
-                    item.featured
-                      ? "border-orange-200 ring-2 ring-orange-500/20 sm:col-span-2 lg:col-span-2"
-                      : "border-slate-100"
-                  }`}
-                >
-                  <div
-                    className={`relative w-full cursor-pointer overflow-hidden ${
-                      item.featured ? "h-[260px] sm:h-[340px]" : "h-[220px] sm:h-[260px]"
-                    }`}
-                    onClick={() => {
-                      setSelectedShowcaseItem(item);
-                      setActiveGalleryImage(item.gallery ? item.gallery[0] : item.image);
-                    }}
-                  >
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent" />
-
-                    {/* BADGES OVERLAY */}
-                    <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
-                      <span className="px-3 py-1 rounded bg-navy-950/80 backdrop-blur text-white text-[10px] font-black uppercase tracking-wider border border-white/10">
-                        {item.tag}
-                      </span>
-                      {item.featured && (
-                        <span className="px-3 py-1 rounded bg-orange-500 text-white text-[10px] font-black uppercase tracking-wider shadow-md">
-                          Featured Design
-                        </span>
-                      )}
-                    </div>
-
-                    {item.gallery && item.gallery.length > 1 && (
-                      <div className="absolute bottom-4 right-4 z-10 bg-navy-950/85 backdrop-blur px-3 py-1.5 rounded-full text-white text-[11px] font-bold flex items-center gap-1.5 border border-white/10">
-                        <Layers className="w-3.5 h-3.5 text-orange-400" />
-                        <span>{item.gallery.length} Camera Views</span>
-                      </div>
-                    )}
-
-                    {item.dimensions && (
-                      <div className="absolute bottom-4 left-4 z-10 text-white text-xs font-extrabold drop-shadow">
-                        <span className="text-orange-400">Scale:</span> {item.dimensions}
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="p-5 sm:p-6 bg-white flex-1 flex flex-col justify-between border-t border-slate-100 z-10">
-                    <div>
-                      <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1">
-                        {item.category}
-                      </span>
-                      <h4 className="text-base sm:text-xl font-bold text-navy-950 tracking-tight line-clamp-1 group-hover:text-orange-500 transition-colors">
-                        {item.title}
-                      </h4>
-                      <p className="text-xs text-navy-900/65 mt-2 line-clamp-2 leading-relaxed">
-                        {item.description}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between gap-3 pt-4 mt-3 border-t border-slate-100">
-                      <button
-                        onClick={() => {
-                          setSelectedShowcaseItem(item);
-                          setActiveGalleryImage(item.gallery ? item.gallery[0] : item.image);
-                        }}
-                        className="text-xs font-bold text-orange-500 hover:text-orange-600 flex items-center gap-1.5 transition-colors"
-                      >
-                        <Eye className="w-4 h-4" /> View Specs & Gallery
-                      </button>
-                      <button
-                        onClick={() => triggerQuickWhatsApp(`Inquiry on ${item.title}`)}
-                        className="px-3.5 py-1.5 bg-navy-50 text-navy-950 hover:bg-orange-500 hover:text-white rounded text-[11px] font-bold transition-all flex items-center gap-1"
-                      >
-                        Inquire <ArrowUpRight className="w-3 h-3" />
-                      </button>
-                    </div>
-                  </div>
-                </motion.div>
+                  item={item}
+                  index={index}
+                  isAutoplayEnabled={isAutoplayEnabled}
+                  onOpenModal={handleOpenShowcaseModal}
+                  onInquire={triggerQuickWhatsApp}
+                />
               ))}
+          </div>
+        </div>
+      </section>
+
+      {/* GET A FREE ESTIMATE SECTION */}
+      <section id="get-quote" className="py-16 sm:py-24 bg-gradient-to-br from-navy-950 via-navy-900 to-[#1a1033] relative overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(249,115,22,0.12),transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(249,115,22,0.06),transparent_55%)]" />
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500/30 to-transparent" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            {/* LEFT — CTA copy */}
+            <div>
+              <span className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] font-black uppercase tracking-widest px-4 py-2 rounded-full mb-6">
+                <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
+                100% Free Consultation
+              </span>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tight leading-tight mb-5">
+                Get Your <span className="text-orange-500">Dream Home</span><br />Plan — Today
+              </h2>
+              <p className="text-navy-200/65 text-sm sm:text-base leading-relaxed mb-8 max-w-md">
+                Fill in your plot details and our qualified engineers will reach out within 24 hours with a complete customized plan — absolutely free.
+              </p>
+              <div className="space-y-4">
+                {[
+                  { icon: "✅", text: "Certified Civil & Structural Engineers" },
+                  { icon: "✅", text: "Serving All Districts Across Tamil Nadu" },
+                  { icon: "✅", text: "2D Plans, 3D Elevation & Vastu Layouts" },
+                  { icon: "✅", text: "Get Drawings Within 3–5 Business Days" },
+                ].map(item => (
+                  <div key={item.text} className="flex items-center gap-3 text-sm text-white/80 font-medium">
+                    <span className="text-base">{item.icon}</span>
+                    <span>{item.text}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-10 flex items-center gap-4">
+                <a href="tel:+918248768635" className="flex items-center gap-2.5 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-5 py-3 rounded-xl transition-all text-sm font-bold">
+                  <svg className="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" /></svg>
+                  +91 82487 68635
+                </a>
+                <span className="text-navy-200/40 text-xs">or fill the form →</span>
+              </div>
+            </div>
+
+            {/* RIGHT — Form card */}
+            <div className="relative">
+              <div className="absolute -inset-1 bg-gradient-to-br from-orange-500/20 via-orange-600/10 to-transparent rounded-3xl blur-xl" />
+              <div className="relative bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl">
+                {inlineFormSubmitted ? (
+                  <div className="text-center py-10">
+                    <div className="w-16 h-16 bg-[#25D366]/10 border border-[#25D366]/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <svg className="w-8 h-8 text-[#25D366]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+                    </div>
+                    <h4 className="text-xl font-black text-white mb-2">Message Sent!</h4>
+                    <p className="text-navy-200/60 text-sm">Opening WhatsApp to connect you with our engineer...</p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="mb-6">
+                      <h3 className="text-xl font-black text-white tracking-tight">Request Free Estimate</h3>
+                      <p className="text-navy-200/55 text-xs mt-1">We'll reply within 24 hours. No spam, ever.</p>
+                    </div>
+                    <form
+                      onSubmit={(e) => {
+                        e.preventDefault();
+                        setInlineFormSubmitted(true);
+                        const msg = `Hi CINORS,\nI'd like a Free Estimate for my plot. Here are my details:\n• Name: ${inlineFormData.name}\n• Phone: ${inlineFormData.phone}\n• Plot Location: ${inlineFormData.location}\n• Plot Dimensions: ${inlineFormData.plotSize}\n• Service Required: ${inlineFormData.service}\n• Current Stage: ${inlineFormData.stage}\n\nPlease contact me. Thank you!`;
+                        setTimeout(() => {
+                          window.open(`https://wa.me/918248768635?text=${encodeURIComponent(msg)}`, "_blank");
+                          setInlineFormSubmitted(false);
+                          setInlineFormData({ name: "", phone: "", location: "", plotSize: "", service: "Complete Package", stage: "Bought a Plot & Planning" });
+                        }, 1500);
+                      }}
+                      className="space-y-4"
+                    >
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Your Name *</label>
+                          <input required type="text" placeholder="e.g. Parthiban" value={inlineFormData.name} onChange={e => setInlineFormData({...inlineFormData, name: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Phone Number *</label>
+                          <input required type="tel" placeholder="e.g. 8248768635" value={inlineFormData.phone} onChange={e => setInlineFormData({...inlineFormData, phone: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
+                        </div>
+                      </div>
+                      <div className="grid sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Plot Location *</label>
+                          <input required type="text" placeholder="e.g. Trichy / Madurai" value={inlineFormData.location} onChange={e => setInlineFormData({...inlineFormData, location: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Plot Dimensions</label>
+                          <input type="text" placeholder="e.g. 30×40 ft / 1200 sq.ft" value={inlineFormData.plotSize} onChange={e => setInlineFormData({...inlineFormData, plotSize: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Service Required</label>
+                        <select value={inlineFormData.service} onChange={e => setInlineFormData({...inlineFormData, service: e.target.value})} className="w-full bg-navy-950 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white outline-none transition-all">
+                          {["2D Floor Plan", "Structural Drawings", "3D Elevation", "Vastu Layout", "Interior Design", "Complete Package"].map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Current Stage</label>
+                        <select value={inlineFormData.stage} onChange={e => setInlineFormData({...inlineFormData, stage: e.target.value})} className="w-full bg-navy-950 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white outline-none transition-all">
+                          {["Bought a Plot & Planning", "Already Have a Plan (Need Changes)", "Under Construction (Need Guidance)", "Just Exploring Options"].map(s => <option key={s} value={s}>{s}</option>)}
+                        </select>
+                      </div>
+                      <button type="submit" className="w-full flex items-center justify-center gap-2.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-black py-3.5 rounded-xl transition-all shadow-lg shadow-orange-500/25 text-sm mt-2">
+                        <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.248 8.477 3.517 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97C16.59 2.028 14.108.977 11.983.977c-5.437 0-9.863 4.37-9.867 9.8a9.74 9.74 0 0 0 1.502 5.093l-1.015 3.7.83-.217 2.083-1.636z" /><path d="M16.924 13.917c-.27-.135-1.597-.788-1.846-.878-.247-.09-.427-.135-.607.135-.18.27-.697.878-.854 1.058-.158.18-.315.202-.585.067-.27-.135-1.138-.419-2.167-1.338-.802-.715-1.343-1.6-1.5-1.871-.158-.27-.017-.417.118-.552.122-.122.27-.315.405-.472.135-.158.18-.27.27-.45.09-.18.045-.337-.022-.472-.068-.135-.608-1.464-.833-2.005-.22-.527-.44-.457-.607-.465-.158-.007-.338-.007-.518-.007-.18 0-.472.067-.72.337-.247.27-.945.923-.945 2.25s.967 2.61 1.102 2.79c.135.18 1.902 2.904 4.609 4.073.644.278 1.147.444 1.539.569.648.206 1.238.177 1.704.107.52-.078 1.597-.652 1.821-1.282.225-.63.225-1.17.158-1.282-.068-.113-.248-.18-.518-.315z" /></svg>
+                        Send via WhatsApp — Free
+                      </button>
+                      <p className="text-center text-[10px] text-white/25 pt-1">By submitting, you agree to be contacted by our engineering team.</p>
+                    </form>
+                  </>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -805,8 +1286,8 @@ export default function HomePage() {
             <div className="md:col-span-4 space-y-4">
               <h5 className="font-extrabold text-sm uppercase tracking-wider text-orange-500">Contact Details</h5>
               <ul className="space-y-3 text-xs text-navy-200/65">
-                <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-orange-500 shrink-0" /><span>Call Us: <a href="tel:+919876543210" className="hover:text-white transition-colors">+91 98765 43210</a></span></li>
-                <li className="flex items-center gap-2"><MessageSquare className="w-4 h-4 text-orange-500 shrink-0" /><span>WhatsApp: <a href="https://wa.me/919876500000" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+91 98765 00000</a></span></li>
+                <li className="flex items-center gap-2"><Phone className="w-4 h-4 text-orange-500 shrink-0" /><span>Call Us: <a href="tel:+918248768635" className="hover:text-white transition-colors">+91 82487 68635</a></span></li>
+                <li className="flex items-center gap-2"><MessageSquare className="w-4 h-4 text-orange-500 shrink-0" /><span>WhatsApp: <a href="https://wa.me/918248768635" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">+91 82487 68635</a></span></li>
                 <li className="flex items-center gap-2"><Mail className="w-4 h-4 text-orange-500 shrink-0" /><span>Email: <a href="mailto:contact@cinors.com" className="hover:text-white transition-colors">contact@cinors.com</a></span></li>
                 <li className="flex items-start gap-2"><MapPin className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" /><span>Head Office: Tamil Nadu, Serving All Districts</span></li>
               </ul>
@@ -821,7 +1302,7 @@ export default function HomePage() {
 
       {/* FLOATING WHATSAPP */}
       <div className="fixed bottom-5 right-5 sm:bottom-6 sm:right-6 z-30">
-        <a href="https://wa.me/919876500000?text=Hi%20CINORS,%20I%20have%20a%20plot%20and%20would%20like%20to%20get%20a%20free%20consultation." target="_blank" rel="noopener noreferrer" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group relative animate-bounce">
+        <a href="https://wa.me/918248768635?text=Hi%20CINORS,%20I%20have%20a%20plot%20and%20would%20like%20to%20get%20a%20free%20consultation." target="_blank" rel="noopener noreferrer" className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-[#25D366] text-white flex items-center justify-center shadow-2xl hover:scale-110 active:scale-95 transition-all group relative animate-bounce">
           <svg className="w-6 h-6 sm:w-7 sm:h-7 fill-white" viewBox="0 0 24 24">
             <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.248 8.477 3.517 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.97C16.59 2.028 14.108.977 11.983.977c-5.437 0-9.863 4.37-9.867 9.8a9.74 9.74 0 0 0 1.502 5.093l-1.015 3.7.83-.217 2.083-1.636z" />
             <path d="M16.924 13.917c-.27-.135-1.597-.788-1.846-.878-.247-.09-.427-.135-.607.135-.18.27-.697.878-.854 1.058-.158.18-.315.202-.585.067-.27-.135-1.138-.419-2.167-1.338-.802-.715-1.343-1.6-1.5-1.871-.158-.27-.017-.417.118-.552.122-.122.27-.315.405-.472.135-.158.18-.27.27-.45.09-.18.045-.337-.022-.472-.068-.135-.608-1.464-.833-2.005-.22-.527-.44-.457-.607-.465-.158-.007-.338-.007-.518-.007-.18 0-.472.067-.72.337-.247.27-.945.923-.945 2.25s.967 2.61 1.102 2.79c.135.18 1.902 2.904 4.609 4.073.644.278 1.147.444 1.539.569.648.206 1.238.177 1.704.107.52-.078 1.597-.652 1.821-1.282.225-.63.225-1.17.158-1.282-.068-.113-.248-.18-.518-.315z" />
@@ -847,7 +1328,7 @@ export default function HomePage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 {[
                   { id: "name", label: "Your Name", type: "text", placeholder: "e.g. Parthiban", field: "name" },
-                  { id: "phone", label: "Phone Number", type: "tel", placeholder: "e.g. 9876543210", field: "phone" },
+                  { id: "phone", label: "Phone Number", type: "tel", placeholder: "e.g. 8248768635", field: "phone" },
                   { id: "location", label: "Plot District/City", type: "text", placeholder: "e.g. Trichy / Madurai", field: "location" },
                   { id: "plotSize", label: "Plot Dimensions / Size", type: "text", placeholder: "e.g. 30x40 ft (1200 sq.ft)", field: "plotSize" },
                 ].map(f => (
@@ -944,35 +1425,77 @@ export default function HomePage() {
               </button>
 
               {/* MAIN MEDIA PREVIEW */}
-              <div className="relative w-full h-[260px] sm:h-[400px] bg-slate-900">
-                <Image
-                  src={activeGalleryImage || selectedShowcaseItem.image}
-                  alt={selectedShowcaseItem.title}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+              <div className="relative w-full h-[260px] sm:h-[420px] bg-slate-950 flex items-center justify-center overflow-hidden">
+                {showVideoPlayer && selectedShowcaseItem.video ? (
+                  <video
+                    key={selectedShowcaseItem.video}
+                    controls
+                    autoPlay
+                    playsInline
+                    preload="auto"
+                    className="w-full h-full object-contain bg-black"
+                  >
+                    <source src={selectedShowcaseItem.video} type="video/mp4" />
+                    Your browser does not support HTML5 video.
+                  </video>
+                ) : (
+                  <AnimatePresence mode="popLayout">
+                    <motion.div
+                      key={activeGalleryImage || selectedShowcaseItem.image}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.6, ease: "easeInOut" }}
+                      className="absolute inset-0 w-full h-full flex items-center justify-center"
+                    >
+                      <Image
+                        src={activeGalleryImage || selectedShowcaseItem.image}
+                        alt={selectedShowcaseItem.title}
+                        fill
+                        className="object-contain"
+                        priority
+                      />
+                    </motion.div>
+                  </AnimatePresence>
+                )}
               </div>
 
-              {/* GALLERY THUMBNAILS IF APPLICABLE */}
-              {selectedShowcaseItem.gallery && selectedShowcaseItem.gallery.length > 1 && (
-                <div className="p-3 bg-slate-100 border-b border-slate-200 flex gap-2.5 overflow-x-auto">
-                  {selectedShowcaseItem.gallery.map((img, idx) => (
+              {/* MEDIA & GALLERY THUMBNAILS */}
+              {((selectedShowcaseItem.gallery && selectedShowcaseItem.gallery.length > 1) || selectedShowcaseItem.video) && (
+                <div className="p-3 bg-slate-100 border-b border-slate-200 flex items-center gap-2.5 overflow-x-auto">
+                  {selectedShowcaseItem.video && (
                     <button
-                      key={idx}
-                      onClick={() => setActiveGalleryImage(img)}
-                      className={`relative w-20 h-14 sm:w-24 sm:h-16 rounded-md overflow-hidden shrink-0 transition-all border-2 ${
-                        (activeGalleryImage || selectedShowcaseItem.image) === img
-                          ? "border-orange-500 scale-105 shadow-md"
-                          : "border-transparent opacity-70 hover:opacity-100"
+                      onClick={() => setShowVideoPlayer(true)}
+                      className={`relative px-3.5 py-2.5 rounded-md shrink-0 transition-all font-bold text-xs flex items-center gap-2 border-2 ${
+                        showVideoPlayer
+                          ? "bg-orange-500 text-white border-orange-500 shadow-md"
+                          : "bg-white text-navy-950 border-slate-200 hover:border-orange-500"
                       }`}
                     >
-                      <Image src={img} alt={`Angle View ${idx + 1}`} fill className="object-cover" />
-                      <span className="absolute bottom-1 right-1 text-[9px] font-black bg-navy-950/80 text-white px-1 rounded">
-                        0{idx + 1}
-                      </span>
+                      <Play className="w-4 h-4 fill-current" />
+                      <span>Play Walkthrough</span>
                     </button>
-                  ))}
+                  )}
+                  {selectedShowcaseItem.gallery &&
+                    selectedShowcaseItem.gallery.map((img, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => {
+                          setShowVideoPlayer(false);
+                          setActiveGalleryImage(img);
+                        }}
+                        className={`relative w-20 h-14 sm:w-24 sm:h-16 rounded-md overflow-hidden shrink-0 transition-all border-2 ${
+                          !showVideoPlayer && (activeGalleryImage || selectedShowcaseItem.image) === img
+                            ? "border-orange-500 scale-105 shadow-md"
+                            : "border-transparent opacity-70 hover:opacity-100"
+                        }`}
+                      >
+                        <Image src={img} alt={`Angle View ${idx + 1}`} fill className="object-cover" />
+                        <span className="absolute bottom-1 right-1 text-[9px] font-black bg-navy-950/80 text-white px-1 rounded">
+                          0{idx + 1}
+                        </span>
+                      </button>
+                    ))}
                 </div>
               )}
 

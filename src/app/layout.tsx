@@ -1,20 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Montserrat, Inter } from "next/font/google";
 import "./globals.css";
-
-const montserrat = Montserrat({
-  variable: "--font-montserrat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: "CINORS | Civil Engineering, Structural Design & Home Planning in Tamil Nadu",
@@ -67,8 +52,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
-        className={`${montserrat.variable} ${inter.variable} antialiased min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white`}
+        className="antialiased min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white"
       >
         {children}
       </body>
