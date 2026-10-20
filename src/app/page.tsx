@@ -30,7 +30,6 @@ import {
   Send,
   Eye,
   Play,
-  Film
 } from "lucide-react";
 
 interface ServiceCard { icon: React.ReactNode; title: string; description: string; }
@@ -50,7 +49,6 @@ interface ShowcaseItem {
   specs?: ShowcaseSpec[];
   featured?: boolean;
 }
-interface Testimonial { quote: string; author: string; role: string; location: string; }
 interface FAQItem { question: string; answer: string; }
 interface Review { name: string; location: string; rating: number; comment: string; date: string; }
 
@@ -1107,7 +1105,7 @@ export default function HomePage() {
                   <>
                     <div className="mb-6">
                       <h3 className="text-xl font-black text-white tracking-tight">Request Free Estimate</h3>
-                      <p className="text-navy-200/55 text-xs mt-1">We'll reply within 24 hours. No spam, ever.</p>
+                      <p className="text-navy-200/55 text-xs mt-1">We&apos;ll reply within 24 hours. No spam, ever.</p>
                     </div>
                     <form
                       onSubmit={(e) => {
