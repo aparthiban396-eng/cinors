@@ -1123,7 +1123,7 @@ export default function HomePage() {
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Your Name *</label>
-                          <input required type="text" placeholder="e.g. Parthiban" value={inlineFormData.name} onChange={e => setInlineFormData({...inlineFormData, name: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
+                          <input required type="text" placeholder="e.g. Rajesh Kumar" value={inlineFormData.name} onChange={e => setInlineFormData({...inlineFormData, name: e.target.value})} className="w-full bg-white/5 border border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all" />
                         </div>
                         <div>
                           <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">Phone Number *</label>
@@ -1325,7 +1325,7 @@ export default function HomePage() {
               </div>
               <form onSubmit={handleSubmit} className="space-y-4">
                 {[
-                  { id: "name", label: "Your Name", type: "text", placeholder: "e.g. Parthiban", field: "name" },
+                  { id: "name", label: "Your Name", type: "text", placeholder: "e.g. Rajesh Kumar", field: "name" },
                   { id: "phone", label: "Phone Number", type: "tel", placeholder: "e.g. 8248768635", field: "phone" },
                   { id: "location", label: "Plot District/City", type: "text", placeholder: "e.g. Trichy / Madurai", field: "location" },
                   { id: "plotSize", label: "Plot Dimensions / Size", type: "text", placeholder: "e.g. 30x40 ft (1200 sq.ft)", field: "plotSize" },
