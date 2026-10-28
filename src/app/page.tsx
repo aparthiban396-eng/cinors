@@ -685,10 +685,19 @@ export default function HomePage() {
                 View Services
               </a>
             </div>
-            <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 pt-6 border-t border-navy-100 w-full max-w-xl">
-              <div><span className="block font-black text-xl sm:text-2xl text-navy-950">100%</span><span className="text-xs text-navy-900/60 font-semibold uppercase tracking-wider">Vastu Friendly</span></div>
-              <div><span className="block font-black text-xl sm:text-2xl text-navy-950">Safe</span><span className="text-xs text-navy-900/60 font-semibold uppercase tracking-wider">Certified Structural</span></div>
-              <div><span className="block font-black text-xl sm:text-2xl text-navy-950">Tamil Nadu</span><span className="text-xs text-navy-900/60 font-semibold uppercase tracking-wider">Full Coverage</span></div>
+            <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-8 pt-6 border-t border-navy-100 w-full max-w-xl">
+              <div>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">100%</span>
+                <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">Vastu Friendly</span>
+              </div>
+              <div>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">Safe</span>
+                <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">Certified Structural</span>
+              </div>
+              <div>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">Tamil Nadu</span>
+                <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">Full Coverage</span>
+              </div>
             </div>
           </div>
 
