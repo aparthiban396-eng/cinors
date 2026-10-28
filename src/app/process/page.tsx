@@ -163,7 +163,7 @@ export default function ProcessPage() {
                   key={item.step}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs relative overflow-hidden"
                 >
@@ -230,7 +230,7 @@ export default function ProcessPage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "4rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
               />
@@ -245,7 +245,7 @@ export default function ProcessPage() {
                   key={idx}
                   initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
+                  viewport={{ once: false, margin: "-40px" }}
                   transition={{ duration: 0.35, delay: (idx % 2) * 0.08 }}
                   className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 hover:border-orange-500/40 hover:bg-white transition-all shadow-xs"
                 >
@@ -304,7 +304,7 @@ export default function ProcessPage() {
                     key={idx}
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, margin: "-40px" }}
+                    viewport={{ once: false, margin: "-40px" }}
                     transition={{ duration: 0.45, delay: idx * 0.1 }}
                     className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center"
                   >

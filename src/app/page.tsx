@@ -435,7 +435,7 @@ export default function HomePage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -446,7 +446,7 @@ export default function HomePage() {
                 key={idx}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
+                viewport={{ once: false, margin: "-60px" }}
                 transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-6 sm:p-8 rounded-xl glass-dark-card hover:border-orange-500/40 hover:bg-navy-900/80 transition-all duration-300 group shadow-lg"
@@ -486,7 +486,7 @@ export default function HomePage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -501,7 +501,7 @@ export default function HomePage() {
                 key={idx}
                 initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
+                viewport={{ once: false, margin: "-60px" }}
                 transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
                 whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden shadow-xs"
@@ -548,7 +548,7 @@ export default function HomePage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -562,7 +562,7 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0, x: -35 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-70px" }}
+              viewport={{ once: false, margin: "-70px" }}
               transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 sm:p-8 rounded-2xl bg-red-50/40 border border-red-200/90 relative overflow-hidden flex flex-col justify-between h-full shadow-xs"
             >
@@ -628,7 +628,7 @@ export default function HomePage() {
             <motion.div
               initial={{ opacity: 0, x: 35 }}
               whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-70px" }}
+              viewport={{ once: false, margin: "-70px" }}
               transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="p-6 sm:p-8 rounded-2xl bg-navy-950 text-white relative overflow-hidden flex flex-col justify-between h-full shadow-xl"
             >
@@ -706,7 +706,7 @@ export default function HomePage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.55, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -721,7 +721,7 @@ export default function HomePage() {
                 key={idx}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.45, delay: idx * 0.12 }}
                 whileHover={{ y: -6 }}
                 className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-lg transition-all"
@@ -828,7 +828,7 @@ export default function HomePage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "3.5rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mt-3"
               />
@@ -855,7 +855,7 @@ export default function HomePage() {
                 key={idx}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.45, delay: idx * 0.12 }}
                 whileHover={{ y: -4 }}
                 className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/30 transition-all"
@@ -898,7 +898,7 @@ export default function HomePage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.55, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -910,7 +910,7 @@ export default function HomePage() {
                 key={idx}
                 initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-40px" }}
+                viewport={{ once: false, margin: "-40px" }}
                 transition={{ duration: 0.35, delay: idx * 0.08 }}
                 className="border border-slate-200 rounded-lg overflow-hidden transition-all bg-white"
               >

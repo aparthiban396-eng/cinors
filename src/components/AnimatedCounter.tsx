@@ -20,10 +20,14 @@ export function AnimatedCounter({
 }: AnimatedCounterProps) {
   const [displayValue, setDisplayValue] = useState(0);
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-40px" });
+  const isInView = useInView(ref, { once: false, margin: "-40px" });
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView) {
+      // Reset to 0 when out of view so it re-animates on scroll back
+      setDisplayValue(0);
+      return;
+    }
 
     let startTime: number | null = null;
     let animId: number;

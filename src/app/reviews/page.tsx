@@ -99,7 +99,7 @@ export default function ReviewsPage() {
             <motion.div
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.5 }}
               className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg"
             >
@@ -146,7 +146,7 @@ export default function ReviewsPage() {
                 <motion.div
                   initial={{ width: 0 }}
                   whileInView={{ width: "3.5rem" }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.55, ease: "easeOut" }}
                   className="h-1 bg-orange-500 mt-2"
                 />
@@ -166,7 +166,7 @@ export default function ReviewsPage() {
                   key={idx}
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
                   whileHover={{ y: -4 }}
                   className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
@@ -204,7 +204,7 @@ export default function ReviewsPage() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.5 }}
               className="mt-16 bg-navy-950 text-white rounded-3xl p-8 sm:p-12 text-center shadow-2xl"
             >

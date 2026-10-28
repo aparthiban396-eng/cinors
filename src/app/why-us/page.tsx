@@ -161,7 +161,7 @@ export default function WhyUsPage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "4rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
               />
@@ -176,7 +176,7 @@ export default function WhyUsPage() {
                   key={idx}
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
                   whileHover={{ y: -6 }}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group"
@@ -207,7 +207,7 @@ export default function WhyUsPage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "4rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
               />
@@ -219,7 +219,7 @@ export default function WhyUsPage() {
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: false, margin: "-50px" }}
               transition={{ duration: 0.5 }}
               className="overflow-x-auto"
             >
@@ -278,7 +278,7 @@ export default function WhyUsPage() {
                 <motion.div
                   initial={{ opacity: 0, x: -30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.55 }}
                 >
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-semibold mb-4">
@@ -321,7 +321,7 @@ export default function WhyUsPage() {
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.55 }}
                   className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 text-center flex flex-col justify-center items-center"
                 >

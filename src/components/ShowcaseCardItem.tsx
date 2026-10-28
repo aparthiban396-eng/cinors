@@ -96,7 +96,7 @@ export const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-50px" }}
+      viewport={{ once: false, margin: "-50px" }}
       transition={{ duration: 0.45, delay: (index % 3) * 0.08 }}
       whileHover={{ y: -5 }}
       className="group rounded-xl overflow-hidden shadow-md border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl flex flex-col h-full relative transition-all bg-white"

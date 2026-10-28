@@ -136,7 +136,7 @@ export default function GetQuotePage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "4rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
               />
@@ -151,7 +151,7 @@ export default function GetQuotePage() {
                   key={s.step}
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.45, delay: idx * 0.12 }}
                   whileHover={{ y: -6 }}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
@@ -180,7 +180,7 @@ export default function GetQuotePage() {
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: "4rem" }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.55, ease: "easeOut" }}
                 className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
               />
@@ -195,7 +195,7 @@ export default function GetQuotePage() {
                   key={idx}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
+                  viewport={{ once: false, margin: "-50px" }}
                   transition={{ duration: 0.45, delay: (idx % 2) * 0.1 }}
                   whileHover={{ y: -5 }}
                   className="bg-slate-50/80 border border-slate-200 rounded-2xl p-6 hover:border-orange-500/30 hover:bg-white transition-all shadow-xs"

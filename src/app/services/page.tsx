@@ -194,7 +194,7 @@ export default function ServicesPage() {
               id={service.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
+              viewport={{ once: false, margin: "-100px" }}
               transition={{ duration: 0.4, delay: idx * 0.05 }}
               className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden hover:border-orange-500/40 transition-all"
             >
@@ -282,7 +282,7 @@ export default function ServicesPage() {
             <motion.div
               initial={{ width: 0 }}
               whileInView={{ width: "4rem" }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.55, ease: "easeOut" }}
               className="h-1 bg-orange-500 mx-auto mt-4"
             />
@@ -307,7 +307,7 @@ export default function ServicesPage() {
                 key={idx}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
+                viewport={{ once: false, margin: "-50px" }}
                 transition={{ duration: 0.45, delay: idx * 0.12 }}
                 whileHover={{ y: -6 }}
                 className="p-6 rounded-xl bg-slate-50 border border-slate-200 hover:border-orange-500/30 transition-all"
