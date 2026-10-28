@@ -38,7 +38,7 @@ export default function Navbar({ onOpenConsultation, onOpenModal }: NavbarProps)
 
         {/* DESKTOP NAV */}
         <nav className="hidden md:flex items-center gap-5 lg:gap-7 text-[14px] lg:text-[15px] font-semibold text-navy-900/80">
-          {navLinks.filter(l => l.href !== "/").map((link) => {
+          {navLinks.map((link) => {
             const active = isActive(link.href);
             return (
               <Link
