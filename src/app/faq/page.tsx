@@ -158,8 +158,12 @@ export default function FAQPage() {
               {filteredFaqs.map((faq, idx) => {
                 const isOpen = expandedIndex === idx;
                 return (
-                  <div
+                  <motion.div
                     key={idx}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.35, delay: (idx % 4) * 0.06 }}
                     className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs hover:border-orange-500/40 transition-colors"
                   >
                     <button
@@ -188,7 +192,7 @@ export default function FAQPage() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>

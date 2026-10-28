@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   ShieldCheck,
   CheckCircle2,
@@ -94,7 +95,12 @@ export default function WhyUsPage() {
             </div>
 
             {/* Quick Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 max-w-4xl mx-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 max-w-4xl mx-auto"
+            >
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
                 <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">150+</div>
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Plots Successfully Engineered</div>
@@ -111,7 +117,7 @@ export default function WhyUsPage() {
                 <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">100%</div>
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Structural Safety & Stability</div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -133,9 +139,14 @@ export default function WhyUsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {trustCards.map((card, idx) => (
-                <div
+                <motion.div
                   key={idx}
-                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group"
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: idx * 0.08 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group shadow-xs"
                 >
                   <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 transition-transform">
                     {card.icon}
@@ -144,7 +155,7 @@ export default function WhyUsPage() {
                   <p className="text-sm text-navy-900/60 leading-relaxed">
                     {card.desc}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

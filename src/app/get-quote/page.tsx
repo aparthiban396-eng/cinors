@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Calculator,
   Phone,
@@ -119,9 +120,14 @@ export default function GetQuotePage() {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {stepsAfterSubmit.map((s) => (
-                <div
+              {stepsAfterSubmit.map((s, idx) => (
+                <motion.div
                   key={s.step}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: idx * 0.1 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
                 >
                   <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 font-black text-xl mb-6">
@@ -129,7 +135,7 @@ export default function GetQuotePage() {
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3">{s.title}</h3>
                   <p className="text-navy-900/60 text-sm leading-relaxed">{s.desc}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

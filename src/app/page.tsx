@@ -255,20 +255,45 @@ export default function HomePage() {
       {/* HERO SECTION */}
       <section className="relative min-h-[calc(100vh-64px)] sm:min-h-[calc(100vh-80px)] flex items-center py-10 md:py-20 lg:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-          <div className="lg:col-span-6 flex flex-col items-start text-left">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-50 border border-navy-100 text-navy-950 font-bold text-xs uppercase tracking-widest mb-5">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="lg:col-span-6 flex flex-col items-start text-left"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4, delay: 0.1 }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-50 border border-navy-100 text-navy-950 font-bold text-xs uppercase tracking-widest mb-5"
+            >
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               Serving All Over Tamil Nadu
-            </div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-[1.08] mb-5">
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-[1.08] mb-5"
+            >
               Bought A Plot & <br className="hidden sm:inline" />
               <span className="text-orange-500">Don&apos;t Know</span> <br />
               Where To Start?
-            </h1>
-            <p className="text-sm sm:text-lg text-navy-900/70 max-w-xl mb-7 leading-relaxed">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="text-sm sm:text-lg text-navy-900/70 max-w-xl mb-7 leading-relaxed"
+            >
               We help transform your empty plot into a well-planned, construction-ready home with professional floor plans, safety-assured structural drawings, and photorealistic 3D designs.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
+            >
               <button
                 onClick={handleOpenConsultationModal}
                 className="px-6 sm:px-8 py-3.5 sm:py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center justify-center gap-2 group active:scale-98"
@@ -281,8 +306,13 @@ export default function HomePage() {
               >
                 View Services
               </Link>
-            </div>
-            <div className="mt-8 grid grid-cols-3 gap-3 sm:gap-8 pt-6 border-t border-navy-100 w-full max-w-xl">
+            </motion.div>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
+              className="mt-8 grid grid-cols-3 gap-3 sm:gap-8 pt-6 border-t border-navy-100 w-full max-w-xl"
+            >
               <div>
                 <span className="block font-black text-base sm:text-2xl text-navy-950">100%</span>
                 <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">
@@ -301,8 +331,8 @@ export default function HomePage() {
                   Full Coverage
                 </span>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
           {/* BEFORE/AFTER SLIDER */}
           <div className="lg:col-span-6 flex justify-center relative w-full h-[280px] sm:h-[420px] lg:h-[500px]">
@@ -454,7 +484,11 @@ export default function HomePage() {
             {services.map((service, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ y: -5 }}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.08 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
                 className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
@@ -644,9 +678,14 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {processSteps.map((step, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-lg transition-all"
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.1 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-xl hover:border-orange-500/30 transition-all"
               >
                 <div>
                   <span className="text-3xl font-black text-orange-500/20 group-hover:text-orange-500 transition-colors">
@@ -659,7 +698,7 @@ export default function HomePage() {
                     {step.description}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -766,9 +805,14 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {reviews.slice(0, 3).map((review, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/30 transition-all"
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.1 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/40 hover:shadow-xl transition-all"
               >
                 <div>
                   <div className="flex items-center gap-1 mb-4">
@@ -789,7 +833,7 @@ export default function HomePage() {
                   </div>
                   <span className="text-[10px] text-navy-900/40 font-semibold">{review.date}</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>

@@ -175,8 +175,9 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.4, delay: idx * 0.05 }}
-              className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden hover:border-orange-500/40 transition-all"
+              transition={{ duration: 0.45, delay: idx * 0.08 }}
+              whileHover={{ y: -6, transition: { duration: 0.2 } }}
+              className="bg-white rounded-2xl border border-slate-200 shadow-md hover:shadow-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300"
             >
               <div className="grid lg:grid-cols-12 gap-8 p-6 sm:p-10 items-start">
                 {/* LEFT INFO */}

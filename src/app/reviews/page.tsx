@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import {
   Star,
   CheckCircle2,
@@ -125,8 +126,13 @@ export default function ReviewsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {reviewsList.map((review, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: (idx % 3) * 0.1 }}
+                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
                   className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
                 >
                   <div>
@@ -154,7 +160,7 @@ export default function ReviewsPage() {
                       <span className="text-xs text-navy-900/40 font-medium">{review.date}</span>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
