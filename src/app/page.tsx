@@ -12,6 +12,8 @@ import {
   AlertTriangle,
   X,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Layers,
   Compass,
   Home,
@@ -101,14 +103,58 @@ const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
       ? gallery[activeImgIndex % gallery.length]
       : item.image;
 
+  // Touch swipe handlers for showcase card
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const isSwiping = useRef(false);
+
+  const handleCardTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isSwiping.current = false;
+  };
+
+  const handleCardTouchMove = (e: React.TouchEvent) => {
+    if (touchStartX.current === null) return;
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    if (Math.abs(deltaX) > 15) {
+      isSwiping.current = true;
+    }
+  };
+
+  const handleCardTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || touchStartY.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - touchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 30 && galleryLength > 1) {
+      if (deltaX < 0) {
+        setActiveImgIndex((prev) => (prev + 1) % galleryLength);
+      } else {
+        setActiveImgIndex((prev) => (prev - 1 + galleryLength) % galleryLength);
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+    setTimeout(() => {
+      isSwiping.current = false;
+    }, 80);
+  };
+
   return (
     <motion.div
       whileHover={{ y: -5 }}
       className="group rounded-xl overflow-hidden shadow-lg border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl flex flex-col h-full relative transition-all"
     >
       <div
-        className="relative w-full h-[220px] sm:h-[260px] cursor-pointer overflow-hidden bg-slate-900"
-        onClick={() => onOpenModal(item, currentImg)}
+        className="relative w-full h-[220px] sm:h-[260px] cursor-pointer overflow-hidden bg-slate-900 touch-pan-y"
+        onTouchStart={handleCardTouchStart}
+        onTouchMove={handleCardTouchMove}
+        onTouchEnd={handleCardTouchEnd}
+        onClick={() => {
+          if (!isSwiping.current) {
+            onOpenModal(item, currentImg);
+          }
+        }}
       >
         {isAutoplayEnabled && item.video ? (
           <video
@@ -140,6 +186,34 @@ const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
           </AnimatePresence>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent pointer-events-none z-10" />
+
+        {/* CARD ARROWS FOR QUICK BROWSING */}
+        {galleryLength > 1 && (
+          <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity z-20">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveImgIndex((prev) => (prev - 1 + galleryLength) % galleryLength);
+              }}
+              className="w-7 h-7 rounded-full bg-navy-950/75 hover:bg-orange-500 text-white flex items-center justify-center pointer-events-auto backdrop-blur transition-all shadow-md active:scale-90"
+              aria-label="Previous photo"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveImgIndex((prev) => (prev + 1) % galleryLength);
+              }}
+              className="w-7 h-7 rounded-full bg-navy-950/75 hover:bg-orange-500 text-white flex items-center justify-center pointer-events-auto backdrop-blur transition-all shadow-md active:scale-90"
+              aria-label="Next photo"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
 
         {/* BADGES OVERLAY */}
         <div className="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
@@ -233,11 +307,121 @@ export default function HomePage() {
   const [activeShowcaseTag, setActiveShowcaseTag] = useState<string>("All");
   const [isAutoplayEnabled, setIsAutoplayEnabled] = useState<boolean>(true);
 
+  // History & Back button management: closing modal on back instead of leaving website
+  const isPopstateClosingRef = useRef(false);
+
   const handleOpenShowcaseModal = useCallback((item: ShowcaseItem, activeImg?: string) => {
     setSelectedShowcaseItem(item);
     setShowVideoPlayer(Boolean(item.video));
     setActiveGalleryImage(activeImg || (item.gallery ? item.gallery[0] : item.image));
+    if (typeof window !== "undefined") {
+      window.history.pushState({ modal: "showcase", id: item.id }, "", `#project-${item.id}`);
+    }
   }, []);
+
+  const handleCloseShowcaseModal = useCallback(() => {
+    setSelectedShowcaseItem(null);
+    if (typeof window !== "undefined" && window.location.hash.startsWith("#project-")) {
+      if (!isPopstateClosingRef.current) {
+        window.history.back();
+      }
+    }
+  }, []);
+
+  const handleOpenConsultationModal = useCallback(() => {
+    setIsModalOpen(true);
+    if (typeof window !== "undefined") {
+      window.history.pushState({ modal: "consultation" }, "", "#consultation");
+    }
+  }, []);
+
+  const handleCloseConsultationModal = useCallback(() => {
+    setIsModalOpen(false);
+    if (typeof window !== "undefined" && window.location.hash === "#consultation") {
+      if (!isPopstateClosingRef.current) {
+        window.history.back();
+      }
+    }
+  }, []);
+
+  const handleOpenReviewModal = useCallback(() => {
+    setIsReviewModalOpen(true);
+    if (typeof window !== "undefined") {
+      window.history.pushState({ modal: "review" }, "", "#review");
+    }
+  }, []);
+
+  const handleCloseReviewModal = useCallback(() => {
+    setIsReviewModalOpen(false);
+    if (typeof window !== "undefined" && window.location.hash === "#review") {
+      if (!isPopstateClosingRef.current) {
+        window.history.back();
+      }
+    }
+  }, []);
+
+  // Popstate listener: closes open modal on browser/phone back button without exiting the website
+  useEffect(() => {
+    const handlePopState = () => {
+      isPopstateClosingRef.current = true;
+      setSelectedShowcaseItem(null);
+      setIsModalOpen(false);
+      setIsReviewModalOpen(false);
+      setTimeout(() => {
+        isPopstateClosingRef.current = false;
+      }, 100);
+    };
+
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
+
+  // Modal gallery image navigation (for swipe & arrows)
+  const handleNextShowcaseImage = useCallback(() => {
+    if (!selectedShowcaseItem?.gallery || selectedShowcaseItem.gallery.length <= 1) return;
+    setShowVideoPlayer(false);
+    setActiveGalleryImage((prev) => {
+      const gallery = selectedShowcaseItem.gallery!;
+      const currentIdx = gallery.indexOf(prev);
+      const nextIdx = currentIdx === -1 ? 1 : (currentIdx + 1) % gallery.length;
+      return gallery[nextIdx];
+    });
+  }, [selectedShowcaseItem]);
+
+  const handlePrevShowcaseImage = useCallback(() => {
+    if (!selectedShowcaseItem?.gallery || selectedShowcaseItem.gallery.length <= 1) return;
+    setShowVideoPlayer(false);
+    setActiveGalleryImage((prev) => {
+      const gallery = selectedShowcaseItem.gallery!;
+      const currentIdx = gallery.indexOf(prev);
+      const prevIdx = currentIdx === -1 ? gallery.length - 1 : (currentIdx - 1 + gallery.length) % gallery.length;
+      return gallery[prevIdx];
+    });
+  }, [selectedShowcaseItem]);
+
+  // Touch swipe handlers for modal preview
+  const modalTouchStartX = useRef<number | null>(null);
+  const modalTouchStartY = useRef<number | null>(null);
+
+  const handleModalTouchStart = (e: React.TouchEvent) => {
+    modalTouchStartX.current = e.touches[0].clientX;
+    modalTouchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleModalTouchEnd = (e: React.TouchEvent) => {
+    if (modalTouchStartX.current === null || modalTouchStartY.current === null) return;
+    const deltaX = e.changedTouches[0].clientX - modalTouchStartX.current;
+    const deltaY = e.changedTouches[0].clientY - modalTouchStartY.current;
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 35) {
+      if (deltaX < 0) {
+        handleNextShowcaseImage();
+      } else {
+        handlePrevShowcaseImage();
+      }
+    }
+    modalTouchStartX.current = null;
+    modalTouchStartY.current = null;
+  };
 
   // When modal is open in photo mode with autoplay enabled, advance gallery photos
   useEffect(() => {
@@ -629,7 +813,7 @@ export default function HomePage() {
             <a href="#faq" className="hover:text-orange-500 transition-colors">FAQ</a>
           </nav>
           <div className="hidden md:flex items-center gap-4">
-            <button onClick={() => setIsModalOpen(true)} className="px-5 py-2.5 bg-orange-500 text-white rounded-md font-semibold text-sm hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 active:scale-95">
+            <button onClick={handleOpenConsultationModal} className="px-5 py-2.5 bg-orange-500 text-white rounded-md font-semibold text-sm hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 active:scale-95">
               Get Free Consultation
             </button>
           </div>
@@ -647,7 +831,7 @@ export default function HomePage() {
                   </a>
                 ))}
                 <div className="grid grid-cols-1 gap-3 pt-3 border-t border-navy-50 mt-2">
-                  <button onClick={() => { setIsMenuOpen(false); setIsModalOpen(true); }} className="w-full py-3 bg-orange-500 text-white text-center rounded-md font-semibold text-sm hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/10">
+                  <button onClick={() => { setIsMenuOpen(false); handleOpenConsultationModal(); }} className="w-full py-3 bg-orange-500 text-white text-center rounded-md font-semibold text-sm hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/10">
                     Get Free Consultation
                   </button>
                   <button onClick={() => { setIsMenuOpen(false); triggerQuickWhatsApp("Mobile Menu Contact"); }} className="w-full py-3 border border-navy-200 text-navy-950 text-center rounded-md font-semibold text-sm hover:bg-navy-50 transition-colors flex items-center justify-center gap-2">
@@ -678,7 +862,7 @@ export default function HomePage() {
               We help transform your empty plot into a well-planned, construction-ready home with professional floor plans, safety-assured structural drawings, and photorealistic 3D designs.
             </p>
             <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
-              <button onClick={() => setIsModalOpen(true)} className="px-6 sm:px-8 py-3.5 sm:py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center justify-center gap-2 group active:scale-98">
+              <button onClick={handleOpenConsultationModal} className="px-6 sm:px-8 py-3.5 sm:py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center justify-center gap-2 group active:scale-98">
                 Get Free Consultation <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
               <a href="#services" className="px-6 sm:px-8 py-3.5 sm:py-4 border border-navy-200 bg-white/50 backdrop-blur text-navy-950 rounded-md font-bold text-sm sm:text-base hover:bg-navy-50 hover:border-navy-300 transition-all text-center flex items-center justify-center">
@@ -934,7 +1118,7 @@ export default function HomePage() {
 
               <div className="mt-7 pt-6 border-t border-white/10 flex items-center justify-between gap-4 flex-wrap bg-navy-900/60 -mx-6 -mb-6 sm:-mx-8 sm:-mb-8 p-4 sm:p-5 rounded-b-2xl">
                 <button
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={handleOpenConsultationModal}
                   className="px-5 py-2.5 bg-orange-500 text-white text-xs sm:text-sm font-bold rounded-md hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95"
                 >
                   Consult An Engineer
@@ -1192,7 +1376,7 @@ export default function HomePage() {
                 <span className="text-white/50 text-sm">({reviews.length} reviews)</span>
               </div>
             </div>
-            <button onClick={() => setIsReviewModalOpen(true)} className="self-center sm:self-auto flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white text-sm font-bold rounded-md hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95">
+            <button onClick={handleOpenReviewModal} className="self-center sm:self-auto flex items-center gap-2 px-5 py-2.5 bg-orange-500 text-white text-sm font-bold rounded-md hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 active:scale-95">
               <Star className="w-4 h-4" /> Leave a Review
             </button>
           </div>
@@ -1264,7 +1448,7 @@ export default function HomePage() {
             <button onClick={() => triggerQuickWhatsApp("Final CTA WhatsApp Now")} className="w-full sm:w-auto px-8 py-4 bg-[#25D366] text-white rounded-md font-bold text-base hover:bg-[#20ba56] transition-colors flex items-center justify-center gap-2 shadow-lg shadow-[#25D366]/20 active:scale-95">
               WhatsApp Now
             </button>
-            <button onClick={() => setIsModalOpen(true)} className="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-base hover:bg-orange-600 transition-colors flex items-center justify-center shadow-lg shadow-orange-500/20 active:scale-95">
+            <button onClick={handleOpenConsultationModal} className="w-full sm:w-auto px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-base hover:bg-orange-600 transition-colors flex items-center justify-center shadow-lg shadow-orange-500/20 active:scale-95">
               Get Free Consultation
             </button>
           </div>
@@ -1324,9 +1508,9 @@ export default function HomePage() {
       <AnimatePresence>
         {isModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsModalOpen(false)} className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleCloseConsultationModal} className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" />
             <motion.div initial={{ scale: 0.95, opacity: 0, y: 15 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 15 }} transition={{ duration: 0.3, ease: "easeOut" }} className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden border border-slate-100 z-10 p-5 sm:p-8 max-h-[90vh] overflow-y-auto">
-              <button onClick={() => setIsModalOpen(false)} className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all"><X className="w-5 h-5" /></button>
+              <button onClick={handleCloseConsultationModal} className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all"><X className="w-5 h-5" /></button>
               <div className="mb-5 pr-6">
                 <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1">100% Free Consultation</span>
                 <h4 className="text-xl sm:text-2xl font-black text-navy-950 tracking-tight leading-tight">Design Your Dream Home</h4>
@@ -1366,9 +1550,9 @@ export default function HomePage() {
       <AnimatePresence>
         {isReviewModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setIsReviewModalOpen(false)} className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" />
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={handleCloseReviewModal} className="absolute inset-0 bg-navy-950/60 backdrop-blur-sm" />
             <motion.div initial={{ scale: 0.95, opacity: 0, y: 15 }} animate={{ scale: 1, opacity: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0, y: 15 }} transition={{ duration: 0.3, ease: "easeOut" }} className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-slate-100 z-10 p-5 sm:p-8 max-h-[90vh] overflow-y-auto">
-              <button onClick={() => setIsReviewModalOpen(false)} className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all"><X className="w-5 h-5" /></button>
+              <button onClick={handleCloseReviewModal} className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all"><X className="w-5 h-5" /></button>
               <div className="mb-6 pr-6">
                 <span className="text-[10px] font-black text-orange-500 uppercase tracking-widest block mb-1">Share Your Experience</span>
                 <h4 className="text-xl sm:text-2xl font-black text-navy-950 tracking-tight">Leave a Review</h4>
@@ -1377,7 +1561,7 @@ export default function HomePage() {
               <form onSubmit={handleReviewSubmit} className="space-y-4">
                 <div>
                   <label className="block text-[11px] font-bold text-navy-900 uppercase tracking-wider mb-1.5">Your Name *</label>
-                  <input type="text" required value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})} placeholder="e.g. Karthik R." className="w-full px-4 py-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 text-navy-950" />
+                  <input type="text" required value={reviewForm.name} onChange={e => setReviewForm({...reviewForm, name: e.target.value})} placeholder="e.g. Anand S." className="w-full px-4 py-3 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 text-navy-950" />
                 </div>
                 <div>
                   <label className="block text-[11px] font-bold text-navy-900 uppercase tracking-wider mb-1.5">Location</label>
@@ -1414,7 +1598,7 @@ export default function HomePage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setSelectedShowcaseItem(null)}
+              onClick={handleCloseShowcaseModal}
               className="absolute inset-0 bg-navy-950/70 backdrop-blur-sm"
             />
             <motion.div
@@ -1425,14 +1609,19 @@ export default function HomePage() {
               className="relative w-full max-w-3xl bg-white rounded-2xl shadow-2xl border border-slate-100 z-10 max-h-[92vh] overflow-y-auto"
             >
               <button
-                onClick={() => setSelectedShowcaseItem(null)}
-                className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all z-20 bg-white/80 backdrop-blur shadow-sm"
+                onClick={handleCloseShowcaseModal}
+                className="absolute top-4 right-4 p-2 text-navy-400 hover:text-navy-950 hover:bg-navy-50 rounded-full transition-all z-30 bg-white/80 backdrop-blur shadow-sm"
+                aria-label="Close project modal"
               >
                 <X className="w-5 h-5" />
               </button>
 
-              {/* MAIN MEDIA PREVIEW */}
-              <div className="relative w-full h-[260px] sm:h-[420px] bg-slate-950 flex items-center justify-center overflow-hidden">
+              {/* MAIN MEDIA PREVIEW WITH SWIPE & DRAG SUPPORT */}
+              <div
+                className="relative w-full h-[260px] sm:h-[420px] bg-slate-950 flex items-center justify-center overflow-hidden touch-pan-y select-none"
+                onTouchStart={handleModalTouchStart}
+                onTouchEnd={handleModalTouchEnd}
+              >
                 {showVideoPlayer && selectedShowcaseItem.video ? (
                   <video
                     key={selectedShowcaseItem.video}
@@ -1446,24 +1635,73 @@ export default function HomePage() {
                     Your browser does not support HTML5 video.
                   </video>
                 ) : (
-                  <AnimatePresence mode="popLayout">
-                    <motion.div
-                      key={activeGalleryImage || selectedShowcaseItem.image}
-                      initial={{ opacity: 0, scale: 0.98 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.6, ease: "easeInOut" }}
-                      className="absolute inset-0 w-full h-full flex items-center justify-center"
-                    >
-                      <Image
-                        src={activeGalleryImage || selectedShowcaseItem.image}
-                        alt={selectedShowcaseItem.title}
-                        fill
-                        className="object-contain"
-                        priority
-                      />
-                    </motion.div>
-                  </AnimatePresence>
+                  <>
+                    <AnimatePresence mode="popLayout">
+                      <motion.div
+                        key={activeGalleryImage || selectedShowcaseItem.image}
+                        drag={!showVideoPlayer && selectedShowcaseItem.gallery && selectedShowcaseItem.gallery.length > 1 ? "x" : false}
+                        dragConstraints={{ left: 0, right: 0 }}
+                        dragElastic={0.25}
+                        onDragEnd={(_e, { offset, velocity }) => {
+                          if (offset.x < -35 || velocity.x < -250) {
+                            handleNextShowcaseImage();
+                          } else if (offset.x > 35 || velocity.x > 250) {
+                            handlePrevShowcaseImage();
+                          }
+                        }}
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.35, ease: "easeInOut" }}
+                        className="absolute inset-0 w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing"
+                      >
+                        <Image
+                          src={activeGalleryImage || selectedShowcaseItem.image}
+                          alt={selectedShowcaseItem.title}
+                          fill
+                          className="object-contain pointer-events-none select-none"
+                          priority
+                        />
+                      </motion.div>
+                    </AnimatePresence>
+
+                    {/* SWIPE NAVIGATION BUTTONS */}
+                    {!showVideoPlayer && selectedShowcaseItem.gallery && selectedShowcaseItem.gallery.length > 1 && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlePrevShowcaseImage();
+                          }}
+                          className="absolute left-2.5 sm:left-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-navy-950/75 hover:bg-orange-500 text-white flex items-center justify-center transition-all z-20 backdrop-blur shadow-xl active:scale-90 border border-white/10"
+                          aria-label="Previous image"
+                        >
+                          <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNextShowcaseImage();
+                          }}
+                          className="absolute right-2.5 sm:right-4 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-navy-950/75 hover:bg-orange-500 text-white flex items-center justify-center transition-all z-20 backdrop-blur shadow-xl active:scale-90 border border-white/10"
+                          aria-label="Next image"
+                        >
+                          <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
+                        </button>
+
+                        {/* Swipe Indicator Pill */}
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 bg-navy-950/80 backdrop-blur px-3 py-1 rounded-full text-white text-[11px] font-bold border border-white/10 flex items-center gap-1.5 shadow-lg pointer-events-none">
+                          <Layers className="w-3 h-3 text-orange-400" />
+                          <span>
+                            {Math.max(1, selectedShowcaseItem.gallery.indexOf(activeGalleryImage || selectedShowcaseItem.image) + 1)} / {selectedShowcaseItem.gallery.length}
+                          </span>
+                          <span className="text-white/40 text-[10px] hidden sm:inline">• Swipe to view</span>
+                        </div>
+                      </>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -1551,7 +1789,7 @@ export default function HomePage() {
                   <button
                     onClick={() => {
                       triggerQuickWhatsApp(`Inquiry regarding ${selectedShowcaseItem.title}`);
-                      setSelectedShowcaseItem(null);
+                      handleCloseShowcaseModal();
                     }}
                     className="w-full sm:w-auto px-6 py-3 bg-orange-500 text-white rounded-lg text-sm font-bold hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95"
                   >
