@@ -103,19 +103,39 @@ export default function ProcessPage() {
         {/* Hero Section */}
         <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+              className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5"
+            >
               <Clock className="w-4 h-4 text-orange-500" />
               Guaranteed 3–5 Business Day Turnaround
-            </div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
+            </motion.div>
+            <motion.h1
+              initial={{ opacity: 0, y: 22 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6"
+            >
               Our 4-Step Engineering <br />
               <span className="text-orange-500">Blueprint Delivery Workflow</span>
-            </h1>
-            <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+            </motion.h1>
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+              className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto"
+            >
               From raw plot measurements to certified, construction-ready engineering drawings — structured, transparent, and hassle-free.
-            </p>
+            </motion.p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            >
               <button
                 onClick={() => setIsModalOpen(true)}
                 className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
@@ -130,7 +150,7 @@ export default function ProcessPage() {
                 <Phone className="w-4 h-4 text-orange-500" />
                 Call: {siteConfig.formattedPhone}
               </a>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -138,17 +158,11 @@ export default function ProcessPage() {
         <section className="py-16 sm:py-24 bg-slate-50/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="space-y-10">
-              {detailedSteps.map((item, idx) => (
-                <motion.div
+              {detailedSteps.map((item) => (
+                <div
                   key={item.step}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
-                  className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 transition-all shadow-xs relative overflow-hidden group"
+                  className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs relative overflow-hidden"
                 >
-                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-3xl" />
                   <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Step badge & icon */}
                     <div className="flex items-center gap-4 lg:flex-col lg:items-start shrink-0">
@@ -193,7 +207,7 @@ export default function ProcessPage() {
                       </div>
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
@@ -209,13 +223,7 @@ export default function ProcessPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 What&apos;s Inside Your Blueprint Package
               </h2>
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: 64 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="h-1 bg-orange-500 mx-auto mt-2 mb-4 rounded-full"
-              />
+              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 You receive high-resolution, print-ready A3/A4 digital drawings formatted for clear understanding by masons, civil engineers, and local authorities.
               </p>

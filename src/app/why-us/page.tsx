@@ -64,19 +64,39 @@ export default function WhyUsPage() {
         <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5"
+              >
                 <ShieldCheck className="w-4 h-4 text-orange-500" />
                 Civil Engineering Excellence
-              </div>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
+              </motion.div>
+              <motion.h1
+                initial={{ opacity: 0, y: 22 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6"
+              >
                 Engineered for Generations, <br />
                 <span className="text-orange-500">Not Just Built by Guesswork</span>
-              </h1>
-              <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto"
+              >
                 Building a home is your life&apos;s biggest financial investment. Discover why over 150+ plot owners in Tamil Nadu trust CINORS to design crack-free, space-optimized, and structurally safe dream homes.
-              </p>
+              </motion.p>
 
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              >
                 <button
                   onClick={() => setIsModalOpen(true)}
                   className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
@@ -91,14 +111,14 @@ export default function WhyUsPage() {
                   <Phone className="w-4 h-4 text-orange-500" />
                   Call: {siteConfig.formattedPhone}
                 </a>
-              </div>
+              </motion.div>
             </div>
 
             {/* Quick Stats Grid */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
               className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 max-w-4xl mx-auto"
             >
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
@@ -131,13 +151,7 @@ export default function WhyUsPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 The 6 Pillars of CINORS Quality
               </h2>
-              <motion.div
-                initial={{ width: 0 }}
-                whileInView={{ width: 64 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="h-1 bg-orange-500 mx-auto mt-2 mb-4 rounded-full"
-              />
+              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 Every drawing that leaves our studio passes rigorous engineering and architectural checks to guarantee practical construction on your plot.
               </p>
@@ -145,24 +159,18 @@ export default function WhyUsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {trustCards.map((card, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                  whileHover={{ y: -7, transition: { duration: 0.25 } }}
-                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/15 transition-all duration-300 group shadow-xs relative overflow-hidden"
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group"
                 >
-                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
-                  <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-300">
+                  <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 transition-transform">
                     {card.icon}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 group-hover:text-orange-500 transition-colors duration-200">{card.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3">{card.title}</h3>
                   <p className="text-sm text-navy-900/60 leading-relaxed">
                     {card.desc}
                   </p>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>

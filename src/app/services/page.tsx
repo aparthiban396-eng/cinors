@@ -135,18 +135,38 @@ export default function ServicesPage() {
       {/* HERO BANNER */}
       <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5"
+          >
             <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
             Complete Pre-Construction Engineering
-          </div>
-          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
+          </motion.div>
+          <motion.h1
+            initial={{ opacity: 0, y: 22 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6"
+          >
             Our Architectural & <br />
             <span className="text-orange-500">Structural Engineering</span> Services
-          </h1>
-          <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto"
+          >
             From preliminary Vastu 2D layouts to earthquake-resistant structural blueprints and photorealistic 3D elevations — everything you need before laying a brick on site.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          </motion.p>
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.45, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
             <button
               onClick={() => setIsModalOpen(true)}
               className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
@@ -161,7 +181,7 @@ export default function ServicesPage() {
             >
               Direct WhatsApp Inquiry
             </a>
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -175,11 +195,9 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-              whileHover={{ y: -6, transition: { duration: 0.25 } }}
-              className="bg-white rounded-2xl border border-slate-200/90 shadow-md hover:shadow-2xl overflow-hidden hover:border-orange-400 transition-all duration-300 group relative"
+              transition={{ duration: 0.4, delay: idx * 0.05 }}
+              className="bg-white rounded-2xl border border-slate-200 shadow-lg overflow-hidden hover:border-orange-500/40 transition-all"
             >
-              <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
               <div className="grid lg:grid-cols-12 gap-8 p-6 sm:p-10 items-start">
                 {/* LEFT INFO */}
                 <div className="lg:col-span-7 space-y-4">

@@ -255,25 +255,20 @@ export default function HomePage() {
       {/* HERO SECTION */}
       <section className="relative min-h-[calc(100vh-64px)] sm:min-h-[calc(100vh-80px)] flex items-center py-10 md:py-20 lg:py-24 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            className="lg:col-span-6 flex flex-col items-start text-left"
-          >
+          <div className="lg:col-span-6 flex flex-col items-start text-left">
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
               className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-navy-50 border border-navy-100 text-navy-950 font-bold text-xs uppercase tracking-widest mb-5"
             >
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               Serving All Over Tamil Nadu
             </motion.div>
             <motion.h1
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 22 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-[1.08] mb-5"
             >
               Bought A Plot & <br className="hidden sm:inline" />
@@ -281,17 +276,17 @@ export default function HomePage() {
               Where To Start?
             </motion.h1>
             <motion.p
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="text-sm sm:text-lg text-navy-900/70 max-w-xl mb-7 leading-relaxed"
             >
               We help transform your empty plot into a well-planned, construction-ready home with professional floor plans, safety-assured structural drawings, and photorealistic 3D designs.
             </motion.p>
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.4 }}
+              transition={{ duration: 0.45, delay: 0.32, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto"
             >
               <button
@@ -308,9 +303,9 @@ export default function HomePage() {
               </Link>
             </motion.div>
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.6, delay: 0.5 }}
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.42, ease: [0.16, 1, 0.3, 1] }}
               className="mt-8 grid grid-cols-3 gap-3 sm:gap-8 pt-6 border-t border-navy-100 w-full max-w-xl"
             >
               <div>
@@ -332,7 +327,7 @@ export default function HomePage() {
                 </span>
               </div>
             </motion.div>
-          </motion.div>
+          </div>
 
           {/* BEFORE/AFTER SLIDER */}
           <div className="lg:col-span-6 flex justify-center relative w-full h-[280px] sm:h-[420px] lg:h-[500px]">
@@ -430,27 +425,19 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
               Why Homeowners Choose CINORS
             </h3>
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: 64 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="h-1 bg-orange-500 mx-auto mt-4 rounded-full"
-            />
+            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {trustCards.map((card, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                whileHover={{ y: -7, transition: { duration: 0.25 } }}
-                className="p-6 sm:p-8 rounded-2xl glass-dark-card hover:border-orange-500/50 hover:bg-navy-900/90 hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 group relative overflow-hidden"
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.4, delay: idx * 0.1 }}
+                className="p-6 sm:p-8 rounded-xl glass-dark-card hover:border-orange-500/40 hover:bg-navy-900/80 transition-all duration-300 group"
               >
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
-                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-orange-500/20 group-hover:border-orange-500/30 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300">
+                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
                   {card.icon}
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold mb-3 tracking-tight group-hover:text-orange-400 transition-colors">
@@ -482,13 +469,7 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Our Design & Engineering Services
             </h3>
-            <motion.div
-              initial={{ width: 0 }}
-              whileInView={{ width: 64 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, ease: "easeOut" }}
-              className="h-1 bg-orange-500 mx-auto mt-4 rounded-full"
-            />
+            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">
               From initial Vastu-compliant layouts to ready-to-execute structural blueprints.
             </p>
@@ -498,37 +479,22 @@ export default function HomePage() {
             {services.map((service, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
-                whileHover={{ y: -7, transition: { duration: 0.25, ease: "easeOut" } }}
-                className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200/90 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/15 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
+                whileHover={{ y: -5 }}
+                className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
               >
-                {/* Left accent border strip that slides down on hover */}
-                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
-
-                {/* Ambient top glow on hover */}
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-                <div>
-                  <div className="w-14 h-14 rounded-xl bg-navy-50/70 border border-slate-100 flex items-center justify-center mb-5 group-hover:bg-orange-50 group-hover:border-orange-200 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 text-orange-500">
-                    {service.icon}
-                  </div>
-                  <h4 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 tracking-tight group-hover:text-orange-500 transition-colors duration-200">
-                    {service.title}
-                  </h4>
-                  <p className="text-sm text-navy-900/60 leading-relaxed mb-6 group-hover:text-navy-900/80 transition-colors">
-                    {service.description}
-                  </p>
+                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
+                <div className="w-14 h-14 rounded-lg bg-navy-50/50 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
+                  {service.icon}
                 </div>
-
+                <h4 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 tracking-tight group-hover:text-orange-500 transition-colors">
+                  {service.title}
+                </h4>
+                <p className="text-sm text-navy-900/60 leading-relaxed mb-5">{service.description}</p>
                 <Link
                   href="/services/"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 transition-colors uppercase tracking-wider"
+                  className="inline-flex items-center gap-1 text-xs font-bold text-orange-500 hover:text-orange-600 transition-colors uppercase tracking-wider"
                 >
-                  <span>View Details & Deliverables</span>
-                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  View Details & Deliverables <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </motion.div>
             ))}
@@ -537,7 +503,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link
               href="/services/"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-102 active:scale-98"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white font-bold text-sm transition-all"
             >
               Explore Full Breakdown of All Services <ArrowRight className="w-4 h-4 text-orange-400" />
             </Link>
@@ -703,14 +669,9 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {processSteps.map((step, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 25 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-xl hover:border-orange-500/30 transition-all"
+                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-lg transition-all"
               >
                 <div>
                   <span className="text-3xl font-black text-orange-500/20 group-hover:text-orange-500 transition-colors">
@@ -723,7 +684,7 @@ export default function HomePage() {
                     {step.description}
                   </p>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
 
@@ -830,14 +791,9 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {reviews.slice(0, 3).map((review, idx) => (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.45, delay: idx * 0.1 }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/40 hover:shadow-xl transition-all"
+                className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/30 transition-all"
               >
                 <div>
                   <div className="flex items-center gap-1 mb-4">
@@ -858,7 +814,7 @@ export default function HomePage() {
                   </div>
                   <span className="text-[10px] text-navy-900/40 font-semibold">{review.date}</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
