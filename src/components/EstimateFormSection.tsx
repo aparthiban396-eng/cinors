@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import { Loader2, CheckCircle, ArrowRight } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
 
-// ← Paste your Web3Forms access key here after getting it from web3forms.com
-const WEB3FORMS_KEY = "YOUR_ACCESS_KEY_HERE";
+const WEB3FORMS_KEY = "a479e76f-57bf-4088-822f-fbf39250b246";
 
 interface EstimateFormSectionProps {
   onOpenConsultation?: () => void;
