@@ -131,7 +131,13 @@ export default function WhyUsPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 The 6 Pillars of CINORS Quality
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: 64 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4 rounded-full"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 Every drawing that leaves our studio passes rigorous engineering and architectural checks to guarantee practical construction on your plot.
               </p>
@@ -141,17 +147,18 @@ export default function WhyUsPage() {
               {trustCards.map((card, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 24 }}
+                  initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.45, delay: idx * 0.08 }}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group shadow-xs"
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ y: -7, transition: { duration: 0.25 } }}
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/15 transition-all duration-300 group shadow-xs relative overflow-hidden"
                 >
-                  <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 transition-transform">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
+                  <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-300">
                     {card.icon}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3">{card.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 group-hover:text-orange-500 transition-colors duration-200">{card.title}</h3>
                   <p className="text-sm text-navy-900/60 leading-relaxed">
                     {card.desc}
                   </p>

@@ -131,10 +131,11 @@ export default function ReviewsPage() {
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.45, delay: (idx % 3) * 0.1 }}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
+                  transition={{ duration: 0.45, delay: (idx % 3) * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 transition-all shadow-xs relative overflow-hidden group"
                 >
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
                   <div>
                     {/* Stars */}
                     <div className="flex items-center gap-1 mb-4">

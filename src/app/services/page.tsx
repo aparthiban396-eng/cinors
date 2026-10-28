@@ -175,10 +175,11 @@ export default function ServicesPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.45, delay: idx * 0.08 }}
-              whileHover={{ y: -6, transition: { duration: 0.2 } }}
-              className="bg-white rounded-2xl border border-slate-200 shadow-md hover:shadow-2xl overflow-hidden hover:border-orange-500/40 transition-all duration-300"
+              transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+              whileHover={{ y: -6, transition: { duration: 0.25 } }}
+              className="bg-white rounded-2xl border border-slate-200/90 shadow-md hover:shadow-2xl overflow-hidden hover:border-orange-400 transition-all duration-300 group relative"
             >
+              <div className="absolute left-0 top-0 bottom-0 w-2 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
               <div className="grid lg:grid-cols-12 gap-8 p-6 sm:p-10 items-start">
                 {/* LEFT INFO */}
                 <div className="lg:col-span-7 space-y-4">

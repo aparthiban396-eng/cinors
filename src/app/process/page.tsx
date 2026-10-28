@@ -144,9 +144,11 @@ export default function ProcessPage() {
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-60px" }}
-                  transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs relative overflow-hidden"
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                  className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 transition-all shadow-xs relative overflow-hidden group"
                 >
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-3xl" />
                   <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Step badge & icon */}
                     <div className="flex items-center gap-4 lg:flex-col lg:items-start shrink-0">
@@ -207,7 +209,13 @@ export default function ProcessPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 What&apos;s Inside Your Blueprint Package
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: 64 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4 rounded-full"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 You receive high-resolution, print-ready A3/A4 digital drawings formatted for clear understanding by masons, civil engineers, and local authorities.
               </p>

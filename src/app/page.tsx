@@ -430,19 +430,27 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
               Why Homeowners Choose CINORS
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: 64 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4 rounded-full"
+            />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {trustCards.map((card, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="p-6 sm:p-8 rounded-xl glass-dark-card hover:border-orange-500/40 hover:bg-navy-900/80 transition-all duration-300 group"
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ y: -7, transition: { duration: 0.25 } }}
+                className="p-6 sm:p-8 rounded-2xl glass-dark-card hover:border-orange-500/50 hover:bg-navy-900/90 hover:shadow-2xl hover:shadow-orange-500/10 transition-all duration-300 group relative overflow-hidden"
               >
-                <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
+                <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center mb-5 group-hover:bg-orange-500/20 group-hover:border-orange-500/30 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300">
                   {card.icon}
                 </div>
                 <h4 className="text-lg sm:text-xl font-bold mb-3 tracking-tight group-hover:text-orange-400 transition-colors">
@@ -474,7 +482,13 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Our Design & Engineering Services
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: 64 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4 rounded-full"
+            />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">
               From initial Vastu-compliant layouts to ready-to-execute structural blueprints.
             </p>
@@ -484,26 +498,37 @@ export default function HomePage() {
             {services.map((service, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
-                transition={{ duration: 0.45, delay: idx * 0.08 }}
-                whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
+                transition={{ duration: 0.5, delay: idx * 0.08, ease: [0.25, 0.1, 0.25, 1] }}
+                whileHover={{ y: -7, transition: { duration: 0.25, ease: "easeOut" } }}
+                className="p-6 sm:p-8 rounded-2xl bg-white border border-slate-200/90 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/15 transition-all duration-300 group relative overflow-hidden flex flex-col justify-between"
               >
-                <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
-                <div className="w-14 h-14 rounded-lg bg-navy-50/50 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
-                  {service.icon}
+                {/* Left accent border strip that slides down on hover */}
+                <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
+
+                {/* Ambient top glow on hover */}
+                <div className="absolute -top-20 -right-20 w-40 h-40 bg-orange-500/10 rounded-full blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+                <div>
+                  <div className="w-14 h-14 rounded-xl bg-navy-50/70 border border-slate-100 flex items-center justify-center mb-5 group-hover:bg-orange-50 group-hover:border-orange-200 group-hover:scale-110 group-hover:rotate-2 transition-all duration-300 text-orange-500">
+                    {service.icon}
+                  </div>
+                  <h4 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 tracking-tight group-hover:text-orange-500 transition-colors duration-200">
+                    {service.title}
+                  </h4>
+                  <p className="text-sm text-navy-900/60 leading-relaxed mb-6 group-hover:text-navy-900/80 transition-colors">
+                    {service.description}
+                  </p>
                 </div>
-                <h4 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 tracking-tight group-hover:text-orange-500 transition-colors">
-                  {service.title}
-                </h4>
-                <p className="text-sm text-navy-900/60 leading-relaxed mb-5">{service.description}</p>
+
                 <Link
                   href="/services/"
-                  className="inline-flex items-center gap-1 text-xs font-bold text-orange-500 hover:text-orange-600 transition-colors uppercase tracking-wider"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-orange-500 hover:text-orange-600 transition-colors uppercase tracking-wider"
                 >
-                  View Details & Deliverables <ArrowRight className="w-3.5 h-3.5" />
+                  <span>View Details & Deliverables</span>
+                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1.5" />
                 </Link>
               </motion.div>
             ))}
@@ -512,7 +537,7 @@ export default function HomePage() {
           <div className="mt-12 text-center">
             <Link
               href="/services/"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white font-bold text-sm transition-all"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-navy-950 hover:bg-navy-900 text-white font-bold text-sm transition-all shadow-lg hover:shadow-xl hover:scale-102 active:scale-98"
             >
               Explore Full Breakdown of All Services <ArrowRight className="w-4 h-4 text-orange-400" />
             </Link>

@@ -126,14 +126,15 @@ export default function GetQuotePage() {
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.45, delay: idx * 0.1 }}
-                  whileHover={{ y: -6, transition: { duration: 0.2 } }}
-                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
+                  transition={{ duration: 0.45, delay: idx * 0.1, ease: [0.25, 0.1, 0.25, 1] }}
+                  whileHover={{ y: -6, transition: { duration: 0.25 } }}
+                  className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-400 hover:shadow-2xl hover:shadow-orange-500/10 transition-all shadow-xs relative overflow-hidden group"
                 >
-                  <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 font-black text-xl mb-6">
+                  <div className="absolute left-0 top-0 bottom-0 w-1.5 bg-gradient-to-b from-orange-400 to-orange-600 scale-y-0 group-hover:scale-y-100 transition-transform origin-top duration-300 ease-out rounded-l-2xl" />
+                  <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 font-black text-xl mb-6 group-hover:scale-110 group-hover:rotate-2 transition-transform duration-300">
                     {s.step}
                   </div>
-                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3">{s.title}</h3>
+                  <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3 group-hover:text-orange-500 transition-colors duration-200">{s.title}</h3>
                   <p className="text-navy-900/60 text-sm leading-relaxed">{s.desc}</p>
                 </motion.div>
               ))}

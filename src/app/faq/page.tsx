@@ -164,8 +164,13 @@ export default function FAQPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true, margin: "-40px" }}
                     transition={{ duration: 0.35, delay: (idx % 4) * 0.06 }}
-                    className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs hover:border-orange-500/40 transition-colors"
+                    className={`bg-white border rounded-xl overflow-hidden shadow-xs transition-all relative group ${
+                      isOpen ? "border-orange-400 shadow-md" : "border-slate-200 hover:border-orange-300"
+                    }`}
                   >
+                    <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-orange-500 transition-transform origin-top duration-300 ${
+                      isOpen ? "scale-y-100" : "scale-y-0 group-hover:scale-y-100"
+                    }`} />
                     <button
                       onClick={() => setExpandedIndex(isOpen ? null : idx)}
                       className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-bold text-navy-950 focus:outline-none cursor-pointer"
