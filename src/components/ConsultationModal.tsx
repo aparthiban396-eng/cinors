@@ -6,19 +6,6 @@ import { X, CheckCircle, ArrowRight, Loader2 } from "lucide-react";
 
 const WEB3FORMS_KEY = "a479e76f-57bf-4088-822f-fbf39250b246";
 
-// Indian mobile: 10 digits, starts with 6–9, rejects dummy patterns like 9999999999
-const INDIAN_PHONE_RE = /^[6-9]\d{9}$/;
-
-function isValidIndianPhone(raw: string): boolean {
-  const digits = raw.replace(/\D/g, "");
-  if (!INDIAN_PHONE_RE.test(digits)) return false;
-  // Reject identical 10 digits (e.g. 9999999999, 8888888888)
-  if (/^(\d)\1{9}$/.test(digits)) return false;
-  // Reject common dummy fake numbers
-  if (digits === "9876543210" || digits === "9898989898" || digits === "9000000000") return false;
-  return true;
-}
-
 interface ConsultationModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -36,16 +23,9 @@ export default function ConsultationModal({ isOpen, onClose }: ConsultationModal
     stage: "Bought a Plot & Planning",
   });
   const [status, setStatus] = useState<FormStatus>("idle");
-  const [phoneError, setPhoneError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    if (!isValidIndianPhone(formData.phone)) {
-      setPhoneError("Enter a valid 10-digit Indian mobile number (starts with 6–9)");
-      return;
-    }
-    setPhoneError("");
     setStatus("submitting");
 
     try {
@@ -81,7 +61,6 @@ export default function ConsultationModal({ isOpen, onClose }: ConsultationModal
     onClose();
     setTimeout(() => {
       setStatus("idle");
-      setPhoneError("");
       setFormData({ name: "", phone: "", email: "", location: "", plotSize: "", stage: "Bought a Plot & Planning" });
     }, 400);
   };
@@ -184,41 +163,11 @@ export default function ConsultationModal({ isOpen, onClose }: ConsultationModal
                       <input
                         type="tel"
                         required
-                        maxLength={10}
                         value={formData.phone}
-                        onChange={(e) => {
-                          const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
-                          setFormData({ ...formData, phone: digits });
-                          if (digits.length === 10) {
-                            if (!isValidIndianPhone(digits)) {
-                              if (/^(\d)\1{9}$/.test(digits) || digits === "9876543210" || digits === "9898989898") {
-                                setPhoneError("Please enter a valid personal mobile number");
-                              } else {
-                                setPhoneError("Must start with 6, 7, 8, or 9");
-                              }
-                            } else {
-                              setPhoneError("");
-                            }
-                          } else {
-                            setPhoneError("");
-                          }
-                        }}
-                        placeholder="e.g. 9876543210"
-                        className={`w-full px-3.5 py-2.5 text-sm border rounded-lg focus:outline-none transition-all text-navy-950 ${
-                          phoneError
-                            ? "border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-400/20"
-                            : formData.phone.length === 10 && isValidIndianPhone(formData.phone)
-                            ? "border-emerald-500 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500/20"
-                            : "border-slate-200 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20"
-                        }`}
+                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        placeholder="e.g. 98XXXXXX00"
+                        className="w-full px-3.5 py-2.5 text-sm border border-slate-200 rounded-lg focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20 text-navy-950"
                       />
-                      {phoneError ? (
-                        <p className="mt-1 text-[10px] text-red-500 font-semibold">⚠ {phoneError}</p>
-                      ) : formData.phone.length === 10 && isValidIndianPhone(formData.phone) ? (
-                        <p className="mt-1 text-[10px] text-emerald-600 font-semibold">✓ Valid mobile number</p>
-                      ) : formData.phone.length > 0 ? (
-                        <p className="mt-1 text-[10px] text-navy-900/40">{formData.phone.length}/10 digits</p>
-                      ) : null}
                     </div>
                   </div>
 
@@ -281,8 +230,8 @@ export default function ConsultationModal({ isOpen, onClose }: ConsultationModal
 
                   <button
                     type="submit"
-                    disabled={status === "submitting" || !isValidIndianPhone(formData.phone)}
-                    className="w-full py-3.5 text-sm font-bold rounded-xl text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 mt-2 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                    disabled={status === "submitting"}
+                    className="w-full py-3.5 text-sm font-bold rounded-xl text-white bg-orange-500 hover:bg-orange-600 transition-all shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 mt-2 disabled:opacity-70 disabled:cursor-not-allowed cursor-pointer"
                   >
                     {status === "submitting" ? (
                       <>

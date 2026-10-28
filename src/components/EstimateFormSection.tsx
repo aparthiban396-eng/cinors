@@ -13,19 +13,6 @@ interface EstimateFormSectionProps {
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-// Indian mobile: 10 digits, starts with 6–9, rejects dummy patterns like 9999999999
-const INDIAN_PHONE_RE = /^[6-9]\d{9}$/;
-
-function isValidIndianPhone(raw: string): boolean {
-  const digits = raw.replace(/\D/g, "");
-  if (!INDIAN_PHONE_RE.test(digits)) return false;
-  // Reject identical 10 digits (e.g. 9999999999, 8888888888)
-  if (/^(\d)\1{9}$/.test(digits)) return false;
-  // Reject common dummy fake numbers
-  if (digits === "9876543210" || digits === "9898989898" || digits === "9000000000") return false;
-  return true;
-}
-
 export default function EstimateFormSection({ onOpenConsultation: _onOpenConsultation }: EstimateFormSectionProps = {}) {
   const [formData, setFormData] = useState({
     name: "",
@@ -37,17 +24,9 @@ export default function EstimateFormSection({ onOpenConsultation: _onOpenConsult
     stage: "Bought a Plot & Planning",
   });
   const [status, setStatus] = useState<FormStatus>("idle");
-  const [phoneError, setPhoneError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Validate phone before submitting
-    if (!isValidIndianPhone(formData.phone)) {
-      setPhoneError("Enter a valid 10-digit Indian mobile number (starts with 6–9)");
-      return;
-    }
-    setPhoneError("");
     setStatus("submitting");
 
     try {
@@ -184,7 +163,6 @@ export default function EstimateFormSection({ onOpenConsultation: _onOpenConsult
                   <button
                     onClick={() => {
                       setStatus("idle");
-                      setPhoneError("");
                       setFormData({ name: "", phone: "", email: "", location: "", plotSize: "", service: "Complete Package", stage: "Bought a Plot & Planning" });
                     }}
                     className="mt-6 px-5 py-2 rounded-lg bg-white/10 hover:bg-white/15 text-white text-xs font-bold transition-all"
@@ -213,50 +191,7 @@ export default function EstimateFormSection({ onOpenConsultation: _onOpenConsult
 
                     <div className="grid sm:grid-cols-2 gap-4">
                       {field("Your Name *", "name", "text", "e.g. Rajesh Kumar")}
-                      <div>
-                        <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">
-                          Phone Number *
-                        </label>
-                        <input
-                          type="tel"
-                          required
-                          maxLength={10}
-                          placeholder="e.g. 9876543210"
-                          value={formData.phone}
-                          onChange={(e) => {
-                            // Only allow digits
-                            const digits = e.target.value.replace(/\D/g, "").slice(0, 10);
-                            setFormData({ ...formData, phone: digits });
-                            if (digits.length === 10) {
-                              if (!isValidIndianPhone(digits)) {
-                                if (/^(\d)\1{9}$/.test(digits) || digits === "9876543210" || digits === "9898989898") {
-                                  setPhoneError("Please enter a valid personal mobile number");
-                                } else {
-                                  setPhoneError("Must start with 6, 7, 8, or 9");
-                                }
-                              } else {
-                                setPhoneError("");
-                              }
-                            } else {
-                              setPhoneError("");
-                            }
-                          }}
-                          className={`w-full bg-white/5 border rounded-lg px-3.5 py-2.5 text-sm text-white placeholder-white/25 outline-none transition-all ${
-                            phoneError
-                              ? "border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-400/20"
-                              : formData.phone.length === 10 && isValidIndianPhone(formData.phone)
-                              ? "border-emerald-400 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/20"
-                              : "border-white/10 focus:border-orange-500 focus:ring-1 focus:ring-orange-500/20"
-                          }`}
-                        />
-                        {phoneError ? (
-                          <p className="mt-1 text-[10px] text-red-400 font-semibold">⚠ {phoneError}</p>
-                        ) : formData.phone.length === 10 && isValidIndianPhone(formData.phone) ? (
-                          <p className="mt-1 text-[10px] text-emerald-400 font-semibold">✓ Valid mobile number</p>
-                        ) : formData.phone.length > 0 ? (
-                          <p className="mt-1 text-[10px] text-white/30">{formData.phone.length}/10 digits</p>
-                        ) : null}
-                      </div>
+                      {field("Phone Number *", "phone", "tel", "e.g. 98XXXXXX00")}
                     </div>
                     <div>
                       <label className="block text-[10px] font-black text-white/50 uppercase tracking-widest mb-1.5">
@@ -301,8 +236,8 @@ export default function EstimateFormSection({ onOpenConsultation: _onOpenConsult
 
                     <button
                       type="submit"
-                      disabled={status === "submitting" || !isValidIndianPhone(formData.phone)}
-                      className="w-full flex items-center justify-center gap-2.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-black py-3.5 rounded-xl transition-all shadow-lg shadow-orange-500/25 text-sm mt-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={status === "submitting"}
+                      className="w-full flex items-center justify-center gap-2.5 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white font-black py-3.5 rounded-xl transition-all shadow-lg shadow-orange-500/25 text-sm mt-2 cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                     >
                       {status === "submitting" ? (
                         <><Loader2 className="w-4 h-4 animate-spin" /> Sending Request...</>
