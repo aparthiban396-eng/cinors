@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import ConsultationModal from "@/components/ConsultationModal";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import EstimateFormSection from "@/components/EstimateFormSection";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { trustCards, siteConfig } from "@/data/siteData";
 
 export default function WhyUsPage() {
@@ -122,11 +123,15 @@ export default function WhyUsPage() {
               className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 mt-16 max-w-4xl mx-auto"
             >
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
-                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">150+</div>
+                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">
+                  <AnimatedCounter value={150} suffix="+" />
+                </div>
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Plots Successfully Engineered</div>
               </div>
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
-                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">100%</div>
+                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">
+                  <AnimatedCounter value={100} suffix="%" />
+                </div>
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Vastu Shastra Compliance</div>
               </div>
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
@@ -134,7 +139,9 @@ export default function WhyUsPage() {
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Fast-Track Delivery Guarantee</div>
               </div>
               <div className="bg-white border border-slate-200 rounded-2xl p-5 text-center shadow-xs hover:border-orange-500/30 transition-all">
-                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">100%</div>
+                <div className="text-3xl sm:text-4xl font-black text-orange-500 mb-1">
+                  <AnimatedCounter value={100} suffix="%" />
+                </div>
                 <div className="text-xs sm:text-sm text-navy-900/60 font-semibold">Structural Safety & Stability</div>
               </div>
             </motion.div>
@@ -151,7 +158,13 @@ export default function WhyUsPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 The 6 Pillars of CINORS Quality
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "4rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 Every drawing that leaves our studio passes rigorous engineering and architectural checks to guarantee practical construction on your plot.
               </p>
@@ -159,8 +172,13 @@ export default function WhyUsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {trustCards.map((card, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
+                  whileHover={{ y: -6 }}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all duration-300 group"
                 >
                   <div className="p-3 bg-orange-50 rounded-xl w-fit mb-5 text-orange-500 group-hover:scale-110 transition-transform">
@@ -170,7 +188,7 @@ export default function WhyUsPage() {
                   <p className="text-sm text-navy-900/60 leading-relaxed">
                     {card.desc}
                   </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -186,13 +204,25 @@ export default function WhyUsPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 Local Mason Thumb-Rules vs. CINORS Structural Engineering
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "4rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 A single structural mistake during foundation or lintel casting can cost lakhs to repair later. See how professional engineering protects your money.
               </p>
             </div>
 
-            <div className="overflow-x-auto">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5 }}
+              className="overflow-x-auto"
+            >
               <div className="min-w-[680px] bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-lg">
                 <div className="grid grid-cols-12 bg-navy-950 p-4 text-xs sm:text-sm font-bold tracking-wider uppercase text-white">
                   <div className="col-span-4 text-navy-200">Construction Factor</div>
@@ -229,7 +259,7 @@ export default function WhyUsPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
 
             <div className="mt-8 text-center">
               <p className="text-xs sm:text-sm text-navy-900/60 font-medium">
@@ -245,7 +275,12 @@ export default function WhyUsPage() {
             <div className="bg-navy-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl relative overflow-hidden">
               <div className="absolute top-0 right-0 w-80 h-80 bg-[radial-gradient(circle_at_top_right,rgba(249,115,22,0.15),transparent_70%)] pointer-events-none" />
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center relative z-10">
-                <div>
+                <motion.div
+                  initial={{ opacity: 0, x: -30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.55 }}
+                >
                   <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-500/20 text-orange-400 text-xs font-semibold mb-4">
                     <TrendingDown className="w-4 h-4" /> Cost Efficiency
                   </div>
@@ -281,9 +316,15 @@ export default function WhyUsPage() {
                       </span>
                     </li>
                   </ul>
-                </div>
+                </motion.div>
 
-                <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 text-center flex flex-col justify-center items-center">
+                <motion.div
+                  initial={{ opacity: 0, x: 30 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.55 }}
+                  className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8 text-center flex flex-col justify-center items-center"
+                >
                   <div className="w-16 h-16 rounded-2xl bg-orange-500/20 flex items-center justify-center text-orange-400 mb-4">
                     <Award className="w-8 h-8" />
                   </div>
@@ -306,7 +347,7 @@ export default function WhyUsPage() {
                       {siteConfig.formattedPhone}
                     </a>
                   </div>
-                </div>
+                </motion.div>
               </div>
             </div>
           </div>

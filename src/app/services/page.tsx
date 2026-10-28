@@ -279,28 +279,43 @@ export default function ServicesPage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Why Building With Proper Drawings Saves You Lakhs
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-slate-50 border border-slate-200">
-              <h4 className="text-base font-bold text-navy-950 mb-2">01. Eliminate Steel & Cement Wastage</h4>
-              <p className="text-xs text-navy-900/70 leading-relaxed">
-                Contractors without structural drawings often over-order steel bars or guess beam depths, wasting up to ₹1.5 - ₹3 Lakhs in raw materials.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-slate-50 border border-slate-200">
-              <h4 className="text-base font-bold text-navy-950 mb-2">02. Prevent Settlement & Slab Cracks</h4>
-              <p className="text-xs text-navy-900/70 leading-relaxed">
-                Soil conditions across Tamil Nadu differ greatly between clay, red soil, and hard rock. Our engineered footings prevent uneven foundation sinking.
-              </p>
-            </div>
-            <div className="p-6 rounded-xl bg-slate-50 border border-slate-200">
-              <h4 className="text-base font-bold text-navy-950 mb-2">03. Smooth Panchayat & Municipal Approvals</h4>
-              <p className="text-xs text-navy-900/70 leading-relaxed">
-                Accurate setbacks, plot boundary verification, and structural stability certifications make your building permit approval process headache-free.
-              </p>
-            </div>
+            {[
+              {
+                step: "01. Eliminate Steel & Cement Wastage",
+                desc: "Contractors without structural drawings often over-order steel bars or guess beam depths, wasting up to ₹1.5 - ₹3 Lakhs in raw materials.",
+              },
+              {
+                step: "02. Prevent Settlement & Slab Cracks",
+                desc: "Soil conditions across Tamil Nadu differ greatly between clay, red soil, and hard rock. Our engineered footings prevent uneven foundation sinking.",
+              },
+              {
+                step: "03. Smooth Panchayat & Municipal Approvals",
+                desc: "Accurate setbacks, plot boundary verification, and structural stability certifications make your building permit approval process headache-free.",
+              },
+            ].map((c, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.12 }}
+                whileHover={{ y: -6 }}
+                className="p-6 rounded-xl bg-slate-50 border border-slate-200 hover:border-orange-500/30 transition-all"
+              >
+                <h4 className="text-base font-bold text-navy-950 mb-2">{c.step}</h4>
+                <p className="text-xs text-navy-900/70 leading-relaxed">{c.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>

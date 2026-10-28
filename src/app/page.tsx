@@ -24,6 +24,7 @@ import ReviewModal from "@/components/ReviewModal";
 import ShowcaseModal from "@/components/ShowcaseModal";
 import { ShowcaseCardItem } from "@/components/ShowcaseCardItem";
 import EstimateFormSection from "@/components/EstimateFormSection";
+import AnimatedCounter from "@/components/AnimatedCounter";
 
 import {
   siteConfig,
@@ -309,21 +310,27 @@ export default function HomePage() {
               className="mt-8 grid grid-cols-3 gap-3 sm:gap-8 pt-6 border-t border-navy-100 w-full max-w-xl"
             >
               <div>
-                <span className="block font-black text-base sm:text-2xl text-navy-950">100%</span>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">
+                  <AnimatedCounter value={100} suffix="%" />
+                </span>
                 <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">
                   Vastu Friendly
                 </span>
               </div>
               <div>
-                <span className="block font-black text-base sm:text-2xl text-navy-950">Safe</span>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">
+                  <AnimatedCounter value={100} suffix="%" />
+                </span>
                 <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">
                   Certified Structural
                 </span>
               </div>
               <div>
-                <span className="block font-black text-base sm:text-2xl text-navy-950">Tamil Nadu</span>
+                <span className="block font-black text-base sm:text-2xl text-navy-950">
+                  <AnimatedCounter value={38} suffix=" Dists" />
+                </span>
                 <span className="block text-[10px] sm:text-xs text-navy-900/60 font-semibold uppercase tracking-wider mt-0.5 leading-tight">
-                  Full Coverage
+                  Tamil Nadu Coverage
                 </span>
               </div>
             </motion.div>
@@ -425,17 +432,24 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
               Why Homeowners Choose CINORS
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {trustCards.map((card, idx) => (
               <motion.div
                 key={idx}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className="p-6 sm:p-8 rounded-xl glass-dark-card hover:border-orange-500/40 hover:bg-navy-900/80 transition-all duration-300 group"
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-6 sm:p-8 rounded-xl glass-dark-card hover:border-orange-500/40 hover:bg-navy-900/80 transition-all duration-300 group shadow-lg"
               >
                 <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
                   {card.icon}
@@ -469,7 +483,13 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Our Design & Engineering Services
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">
               From initial Vastu-compliant layouts to ready-to-execute structural blueprints.
             </p>
@@ -479,8 +499,12 @@ export default function HomePage() {
             {services.map((service, idx) => (
               <motion.div
                 key={idx}
-                whileHover={{ y: -5 }}
-                className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden"
+                initial={{ opacity: 0, y: 28 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
+                whileHover={{ y: -6, transition: { duration: 0.2 } }}
+                className="p-6 sm:p-8 rounded-xl bg-white border border-slate-200/80 hover:border-orange-500/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden shadow-xs"
               >
                 <div className="absolute left-0 top-0 bottom-0 w-[3px] bg-orange-500 scale-y-0 group-hover:scale-y-100 transition-transform origin-bottom duration-300" />
                 <div className="w-14 h-14 rounded-lg bg-navy-50/50 flex items-center justify-center mb-5 group-hover:bg-orange-500/10 transition-colors">
@@ -521,7 +545,13 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Avoid Costly Mistakes Before Construction
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">
               Correcting architectural or structural errors during building is 10x more expensive.
             </p>
@@ -529,7 +559,13 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-10 items-stretch">
             {/* LEFT CARD: CRITICAL RISKS */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-red-50/40 border border-red-200/90 relative overflow-hidden flex flex-col justify-between h-full shadow-xs">
+            <motion.div
+              initial={{ opacity: 0, x: -35 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+              className="p-6 sm:p-8 rounded-2xl bg-red-50/40 border border-red-200/90 relative overflow-hidden flex flex-col justify-between h-full shadow-xs"
+            >
               <div>
                 <span className="px-3 py-1 rounded bg-red-600 text-white font-bold text-[10px] uppercase tracking-wider inline-flex items-center gap-1.5">
                   <AlertTriangle className="w-3 h-3" /> The Expensive Risks
@@ -586,10 +622,16 @@ export default function HomePage() {
                   10x Higher Than Pre-Planning
                 </span>
               </div>
-            </div>
+            </motion.div>
 
             {/* RIGHT CARD: THE SOLUTION */}
-            <div className="p-6 sm:p-8 rounded-2xl bg-navy-950 text-white relative overflow-hidden flex flex-col justify-between h-full shadow-xl">
+            <motion.div
+              initial={{ opacity: 0, x: 35 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true, margin: "-70px" }}
+              transition={{ duration: 0.55, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              className="p-6 sm:p-8 rounded-2xl bg-navy-950 text-white relative overflow-hidden flex flex-col justify-between h-full shadow-xl"
+            >
               <div>
                 <span className="px-3 py-1 rounded bg-orange-500 text-white font-bold text-[10px] uppercase tracking-wider inline-flex items-center gap-1.5">
                   <ShieldCheck className="w-3 h-3" /> The Engineering Solution
@@ -646,7 +688,7 @@ export default function HomePage() {
                   Zero Structural Surprises
                 </span>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -661,7 +703,13 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               How It Works
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
             <p className="text-navy-900/60 mt-4 text-sm sm:text-base">
               A streamlined, fast delivery process to get your home ready for construction in 3–5 days.
             </p>
@@ -669,8 +717,13 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 relative">
             {processSteps.map((step, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.12 }}
+                whileHover={{ y: -6 }}
                 className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between relative group hover:shadow-lg transition-all"
               >
                 <div>
@@ -684,7 +737,7 @@ export default function HomePage() {
                     {step.description}
                   </p>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
 
@@ -772,6 +825,13 @@ export default function HomePage() {
               <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
                 What Homeowners Say
               </h3>
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "3.5rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mt-3"
+              />
             </div>
             <div className="flex items-center gap-3">
               <button
@@ -791,8 +851,13 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {reviews.slice(0, 3).map((review, idx) => (
-              <div
+              <motion.div
                 key={idx}
+                initial={{ opacity: 0, y: 25 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 0.45, delay: idx * 0.12 }}
+                whileHover={{ y: -4 }}
                 className="p-6 rounded-xl bg-white border border-slate-200 flex flex-col justify-between shadow-xs hover:border-orange-500/30 transition-all"
               >
                 <div>
@@ -814,7 +879,7 @@ export default function HomePage() {
                   </div>
                   <span className="text-[10px] text-navy-900/40 font-semibold">{review.date}</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -830,14 +895,24 @@ export default function HomePage() {
             <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950">
               Frequently Asked Questions
             </h3>
-            <div className="w-16 h-1 bg-orange-500 mx-auto mt-4" />
+            <motion.div
+              initial={{ width: 0 }}
+              whileInView={{ width: "4rem" }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
+              className="h-1 bg-orange-500 mx-auto mt-4"
+            />
           </div>
 
           <div className="space-y-4">
             {faqs.slice(0, 4).map((faq, idx) => (
-              <div
+              <motion.div
                 key={idx}
-                className="border border-slate-200 rounded-lg overflow-hidden transition-all"
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-40px" }}
+                transition={{ duration: 0.35, delay: idx * 0.08 }}
+                className="border border-slate-200 rounded-lg overflow-hidden transition-all bg-white"
               >
                 <button
                   onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
@@ -863,7 +938,7 @@ export default function HomePage() {
                     </motion.div>
                   )}
                 </AnimatePresence>
-              </div>
+              </motion.div>
             ))}
           </div>
 

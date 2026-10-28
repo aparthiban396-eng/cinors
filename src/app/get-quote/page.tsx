@@ -133,16 +133,27 @@ export default function GetQuotePage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 What Happens After You Inquire?
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "4rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 No pushy sales calls. Just direct technical guidance from qualified civil engineers.
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              {stepsAfterSubmit.map((s) => (
-                <div
+              {stepsAfterSubmit.map((s, idx) => (
+                <motion.div
                   key={s.step}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: idx * 0.12 }}
+                  whileHover={{ y: -6 }}
                   className="bg-white border border-slate-200/90 rounded-2xl p-6 sm:p-8 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
                 >
                   <div className="w-12 h-12 rounded-xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500 font-black text-xl mb-6">
@@ -150,7 +161,7 @@ export default function GetQuotePage() {
                   </div>
                   <h3 className="text-lg sm:text-xl font-bold text-navy-950 mb-3">{s.title}</h3>
                   <p className="text-navy-900/60 text-sm leading-relaxed">{s.desc}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -166,7 +177,13 @@ export default function GetQuotePage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 Popular Plot Sizes We Engineer
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "4rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 Not sure what can fit on your land? Here is how we typically optimize popular plot dimensions across Tamil Nadu.
               </p>
@@ -174,8 +191,13 @@ export default function GetQuotePage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
               {plotGuide.map((p, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: (idx % 2) * 0.1 }}
+                  whileHover={{ y: -5 }}
                   className="bg-slate-50/80 border border-slate-200 rounded-2xl p-6 hover:border-orange-500/30 hover:bg-white transition-all shadow-xs"
                 >
                   <div className="flex items-center justify-between mb-3">
@@ -186,7 +208,7 @@ export default function GetQuotePage() {
                   </div>
                   <div className="text-sm font-bold text-orange-600 mb-2">{p.type}</div>
                   <p className="text-sm text-navy-900/60 leading-relaxed">{p.features}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>

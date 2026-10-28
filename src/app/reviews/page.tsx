@@ -15,6 +15,7 @@ import ConsultationModal from "@/components/ConsultationModal";
 import ReviewModal from "@/components/ReviewModal";
 import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import EstimateFormSection from "@/components/EstimateFormSection";
+import { AnimatedCounter } from "@/components/AnimatedCounter";
 import { initialReviews, siteConfig } from "@/data/siteData";
 import { Review } from "@/types";
 
@@ -95,11 +96,19 @@ export default function ReviewsPage() {
         {/* Aggregate Ratings Overview */}
         <section className="py-12 bg-slate-50/70 border-b border-slate-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 25 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-50px" }}
+              transition={{ duration: 0.5 }}
+              className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-10 shadow-lg"
+            >
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 {/* Score Column */}
                 <div className="lg:col-span-4 text-center lg:border-r lg:border-slate-200 lg:pr-8">
-                  <div className="text-6xl sm:text-7xl font-black text-navy-950 mb-2">5.0</div>
+                  <div className="text-6xl sm:text-7xl font-black text-navy-950 mb-2">
+                    <AnimatedCounter value={5} suffix=".0" />
+                  </div>
                   <div className="flex justify-center gap-1 mb-2">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-6 h-6 text-orange-500 fill-orange-500" />
@@ -107,7 +116,7 @@ export default function ReviewsPage() {
                   </div>
                   <p className="text-xs sm:text-sm text-navy-900/60 font-semibold">Based on 150+ Projects Across Tamil Nadu</p>
                   <div className="mt-4 inline-flex items-center gap-2 text-xs font-bold text-emerald-600 bg-emerald-50 px-3.5 py-1.5 rounded-full border border-emerald-200">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" /> 100% Recommendation Rate
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" /> <AnimatedCounter value={100} suffix="%" /> Recommendation Rate
                   </div>
                 </div>
 
@@ -121,7 +130,7 @@ export default function ReviewsPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -134,6 +143,13 @@ export default function ReviewsPage() {
                   Verified Experiences
                 </span>
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-navy-950">Recent Client Feedback</h2>
+                <motion.div
+                  initial={{ width: 0 }}
+                  whileInView={{ width: "3.5rem" }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.55, ease: "easeOut" }}
+                  className="h-1 bg-orange-500 mt-2"
+                />
               </div>
               <button
                 onClick={() => setIsReviewModalOpen(true)}
@@ -146,8 +162,13 @@ export default function ReviewsPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {reviewsList.map((review, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.45, delay: (idx % 3) * 0.12 }}
+                  whileHover={{ y: -4 }}
                   className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col justify-between hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs"
                 >
                   <div>
@@ -175,12 +196,18 @@ export default function ReviewsPage() {
                       <span className="text-xs text-navy-900/40 font-medium">{review.date}</span>
                     )}
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
             {/* Submit CTA Banner */}
-            <div className="mt-16 bg-navy-950 text-white rounded-3xl p-8 sm:p-12 text-center shadow-2xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mt-16 bg-navy-950 text-white rounded-3xl p-8 sm:p-12 text-center shadow-2xl"
+            >
               <h3 className="text-2xl sm:text-3xl font-black text-white mb-2">Built Your Home with CINORS?</h3>
               <p className="text-navy-200/65 text-sm max-w-xl mx-auto mb-6">
                 We love seeing our blueprints turn into real homes! Send your construction photos or leave a review to inspire future home builders.
@@ -199,7 +226,7 @@ export default function ReviewsPage() {
                   Email Us Photos: {siteConfig.email}
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 

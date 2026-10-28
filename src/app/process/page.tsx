@@ -158,9 +158,13 @@ export default function ProcessPage() {
         <section className="py-16 sm:py-24 bg-slate-50/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="space-y-10">
-              {detailedSteps.map((item) => (
-                <div
+              {detailedSteps.map((item, idx) => (
+                <motion.div
                   key={item.step}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
                   className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs relative overflow-hidden"
                 >
                   <div className="flex flex-col lg:flex-row gap-8 items-start">
@@ -207,7 +211,7 @@ export default function ProcessPage() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -223,7 +227,13 @@ export default function ProcessPage() {
               <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 What&apos;s Inside Your Blueprint Package
               </h2>
-              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <motion.div
+                initial={{ width: 0 }}
+                whileInView={{ width: "4rem" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.55, ease: "easeOut" }}
+                className="h-1 bg-orange-500 mx-auto mt-2 mb-4"
+              />
               <p className="text-navy-900/60 text-sm sm:text-base">
                 You receive high-resolution, print-ready A3/A4 digital drawings formatted for clear understanding by masons, civil engineers, and local authorities.
               </p>
@@ -231,8 +241,12 @@ export default function ProcessPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-4xl mx-auto">
               {packageDeliverables.map((item, idx) => (
-                <div
+                <motion.div
                   key={idx}
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-40px" }}
+                  transition={{ duration: 0.35, delay: (idx % 2) * 0.08 }}
                   className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 hover:border-orange-500/40 hover:bg-white transition-all shadow-xs"
                 >
                   <div className="p-1 rounded-full bg-orange-50 text-orange-600 shrink-0 mt-0.5">
@@ -241,7 +255,7 @@ export default function ProcessPage() {
                   <span className="text-xs sm:text-sm text-navy-950 font-bold">
                     {item}
                   </span>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
@@ -264,26 +278,41 @@ export default function ProcessPage() {
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
-                  <div className="text-orange-400 font-black text-2xl mb-2">1</div>
-                  <h4 className="font-bold text-white mb-1">Plot Dimensions</h4>
-                  <p className="text-xs text-navy-200/60">Length & breadth in feet or meters (e.g. 30x40, 25x50).</p>
-                </div>
-                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
-                  <div className="text-orange-400 font-black text-2xl mb-2">2</div>
-                  <h4 className="font-bold text-white mb-1">Facing Direction</h4>
-                  <p className="text-xs text-navy-200/60">Direction the road faces (North, East, South, or West).</p>
-                </div>
-                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
-                  <div className="text-orange-400 font-black text-2xl mb-2">3</div>
-                  <h4 className="font-bold text-white mb-1">BHK & Floors</h4>
-                  <p className="text-xs text-navy-200/60">Ground floor, G+1, number of bedrooms and attached baths.</p>
-                </div>
-                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
-                  <div className="text-orange-400 font-black text-2xl mb-2">4</div>
-                  <h4 className="font-bold text-white mb-1">Special Needs</h4>
-                  <p className="text-xs text-navy-200/60">Puja room, car porch, open terrace, or rental portion.</p>
-                </div>
+                {[
+                  {
+                    num: "1",
+                    title: "Plot Dimensions",
+                    desc: "Length & breadth in feet or meters (e.g. 30x40, 25x50).",
+                  },
+                  {
+                    num: "2",
+                    title: "Facing Direction",
+                    desc: "Direction the road faces (North, East, South, or West).",
+                  },
+                  {
+                    num: "3",
+                    title: "BHK & Floors",
+                    desc: "Ground floor, G+1, number of bedrooms and attached baths.",
+                  },
+                  {
+                    num: "4",
+                    title: "Special Needs",
+                    desc: "Puja room, car porch, open terrace, or rental portion.",
+                  },
+                ].map((prep, idx) => (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.45, delay: idx * 0.1 }}
+                    className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center"
+                  >
+                    <div className="text-orange-400 font-black text-2xl mb-2">{prep.num}</div>
+                    <h4 className="font-bold text-white mb-1">{prep.title}</h4>
+                    <p className="text-xs text-navy-200/60">{prep.desc}</p>
+                  </motion.div>
+                ))}
               </div>
             </div>
           </div>

@@ -178,8 +178,12 @@ export default function FAQPage() {
               {filteredFaqs.map((faq, idx) => {
                 const isOpen = expandedIndex === idx;
                 return (
-                  <div
+                  <motion.div
                     key={idx}
+                    initial={{ opacity: 0, y: 15 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-40px" }}
+                    transition={{ duration: 0.35, delay: (idx % 6) * 0.06 }}
                     className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs hover:border-orange-500/40 transition-colors"
                   >
                     <button
@@ -208,13 +212,19 @@ export default function FAQPage() {
                         </motion.div>
                       )}
                     </AnimatePresence>
-                  </div>
+                  </motion.div>
                 );
               })}
             </div>
 
             {/* Support Callout Box */}
-            <div className="mt-16 bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 text-center shadow-lg">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="mt-16 bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 text-center shadow-lg"
+            >
               <h3 className="text-xl sm:text-2xl font-black text-navy-950 mb-2">Have a Custom Plot Requirement?</h3>
               <p className="text-navy-900/60 text-sm max-w-lg mx-auto mb-6">
                 Every land parcel is unique. Call our senior engineering desk directly or email us to get answers for your specific site conditions.
@@ -235,7 +245,7 @@ export default function FAQPage() {
                   {siteConfig.email}
                 </a>
               </div>
-            </div>
+            </motion.div>
           </div>
         </section>
 

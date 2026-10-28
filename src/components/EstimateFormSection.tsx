@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { Loader2, CheckCircle, ArrowRight } from "lucide-react";
 import { siteConfig } from "@/data/siteData";
 
@@ -12,7 +13,7 @@ interface EstimateFormSectionProps {
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
-export default function EstimateFormSection({ onOpenConsultation }: EstimateFormSectionProps = {}) {
+export default function EstimateFormSection({ onOpenConsultation: _onOpenConsultation }: EstimateFormSectionProps = {}) {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -84,7 +85,12 @@ export default function EstimateFormSection({ onOpenConsultation }: EstimateForm
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
           {/* LEFT — CTA Copy */}
-          <div>
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55 }}
+          >
             <span className="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 text-[11px] font-black uppercase tracking-widest px-4 py-2 rounded-full mb-6">
               <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
               100% Free Consultation
@@ -128,10 +134,16 @@ export default function EstimateFormSection({ onOpenConsultation }: EstimateForm
                 {siteConfig.email}
               </a>
             </div>
-          </div>
+          </motion.div>
 
           {/* RIGHT — Form Card */}
-          <div className="relative">
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55 }}
+            className="relative"
+          >
             <div className="absolute -inset-1 bg-gradient-to-br from-orange-500/20 via-orange-600/10 to-transparent rounded-3xl blur-xl" />
             <div className="relative bg-white/[0.04] backdrop-blur-md border border-white/10 rounded-2xl p-6 sm:p-8 shadow-2xl">
 
@@ -241,7 +253,7 @@ export default function EstimateFormSection({ onOpenConsultation }: EstimateForm
                 </>
               )}
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
     </section>
