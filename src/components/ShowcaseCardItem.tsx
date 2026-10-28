@@ -112,35 +112,24 @@ export const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
           }
         }}
       >
-        {isAutoplayEnabled && item.video ? (
-          <video
-            src={item.video}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="object-cover w-full h-full pointer-events-none"
-          />
-        ) : (
-          <AnimatePresence mode="popLayout">
-            <motion.div
-              key={currentImg}
-              initial={{ opacity: 0, scale: 1.06 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.75, ease: "easeInOut" }}
-              className="absolute inset-0 w-full h-full"
-            >
-              <Image
-                src={currentImg}
-                alt={item.title}
-                fill
-                className="object-cover group-hover:scale-105 transition-all duration-700"
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              />
-            </motion.div>
-          </AnimatePresence>
-        )}
+        <AnimatePresence mode="popLayout">
+          <motion.div
+            key={currentImg}
+            initial={{ opacity: 0, scale: 1.06 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.75, ease: "easeInOut" }}
+            className="absolute inset-0 w-full h-full"
+          >
+            <Image
+              src={currentImg}
+              alt={item.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-all duration-700"
+              sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            />
+          </motion.div>
+        </AnimatePresence>
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/80 via-navy-950/20 to-transparent pointer-events-none z-10" />
 
         {/* CARD ARROWS FOR QUICK BROWSING */}
@@ -183,14 +172,14 @@ export const ShowcaseCardItem = React.memo(function ShowcaseCardItem({
           )}
           {item.video && (
             <span className="px-2.5 py-1 rounded bg-red-600/90 backdrop-blur text-white text-[10px] font-black uppercase tracking-wider shadow-md flex items-center gap-1">
-              <Play className="w-2.5 h-2.5 fill-white" /> {isAutoplayEnabled ? "Playing" : "Video"}
+              <Play className="w-2.5 h-2.5 fill-white" /> Walkthrough Video
             </span>
           )}
         </div>
 
-        {item.video && !isAutoplayEnabled && (
+        {item.video && (
           <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10">
-            <div className="w-12 h-12 rounded-full bg-orange-500/90 text-white flex items-center justify-center shadow-xl backdrop-blur-xs group-hover:scale-110 transition-transform">
+            <div className="w-13 h-13 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-2xl backdrop-blur-xs group-hover:scale-115 transition-all">
               <Play className="w-5 h-5 fill-white translate-x-0.5" />
             </div>
           </div>

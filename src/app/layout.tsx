@@ -1,5 +1,18 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, Montserrat } from "next/font/google";
 import "./globals.css";
+
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const montserrat = Montserrat({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-montserrat",
+});
 
 export const metadata: Metadata = {
   title: "CINORS | Civil Engineering, Structural Design & Home Planning in Tamil Nadu",
@@ -27,7 +40,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "CINORS | Civil Engineering, Structural Design & Home Planning",
     description: "Convert your Tamil Nadu plot into a construction-ready home with professional engineering and architectural layouts.",
-    url: "https://cinors.com", // Placeholder domain for visual accuracy
+    url: "https://cinors.com",
     siteName: "CINORS",
     locale: "en_IN",
     type: "website",
@@ -51,7 +64,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en" className={`${inter.variable} ${montserrat.variable} scroll-smooth`}>
       <body
         className="antialiased min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white"
       >

@@ -94,7 +94,7 @@ export default function ShowcaseModal({
                 controls
                 autoPlay
                 playsInline
-                preload="auto"
+                preload="metadata"
                 className="w-full h-full object-contain bg-black"
               >
                 <source src={item.video} type="video/mp4" />
