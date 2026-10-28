@@ -112,8 +112,8 @@ export default function WhyUsPage() {
                 <div className="text-xs sm:text-sm text-slate-400 font-medium">Fast-Track Delivery Guarantee</div>
               </div>
               <div className="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 text-center backdrop-blur-sm">
-                <div className="text-3xl sm:text-4xl font-extrabold text-orange-400 mb-1">0%</div>
-                <div className="text-xs sm:text-sm text-slate-400 font-medium">Foundation Settlement Issues</div>
+                <div className="text-3xl sm:text-4xl font-extrabold text-orange-400 mb-1">100%</div>
+                <div className="text-xs sm:text-sm text-slate-400 font-medium">Structural Safety & Stability</div>
               </div>
             </div>
           </div>
