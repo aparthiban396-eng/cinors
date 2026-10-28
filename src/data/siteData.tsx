@@ -26,7 +26,7 @@ export const siteConfig = {
   name: "CINORS",
   phone: "8248768635",
   formattedPhone: "+91 82487 68635",
-  email: "contact@cinors.com",
+  email: "contact@cinors.in",
   office: "Tamil Nadu, Serving All Districts",
   getWhatsAppUrl: (msg?: string) => {
     const text = msg || "Hi CINORS, I would like to get a free consultation for my plot planning.";
