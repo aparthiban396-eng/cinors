@@ -6,6 +6,7 @@ import {
   Play,
   Pause,
   ArrowRight,
+  Phone,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -88,51 +89,46 @@ export default function ShowcasePage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-      <Navbar onOpenModal={() => setIsConsultModalOpen(true)} />
+    <div className="min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white">
+      <Navbar onOpenConsultation={() => setIsConsultModalOpen(true)} />
 
-      <main className="flex-grow pt-24 pb-16">
+      <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 lg:py-24 border-b border-slate-800/80 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(249,115,22,0.15),rgba(255,255,255,0))] pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-6">
-              <Sparkles className="w-4 h-4" />
+        <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-4xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+              <Sparkles className="w-4 h-4 text-orange-500" />
               Engineered Blueprints & 3D Visualization
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
               Architectural & Structural <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-                Design Portfolio
-              </span>
+              <span className="text-orange-500">Design Portfolio</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
               Explore our completed residential villas, Vastu floor plans, tensile carports, and commercial projects across Tamil Nadu. Swipe through multi-angle views and 3D architectural renders.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={() => setIsConsultModalOpen(true)}
-                className="px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg shadow-orange-500/25 flex items-center gap-2 group"
+                className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
               >
                 Plan Your House With Us
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-4 h-4" />
               </button>
               <a
-                href={siteConfig.getWhatsAppUrl("Hi CINORS, I saw your showcase portfolio and want to discuss blueprints for my plot.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all"
+                href={`tel:+91${siteConfig.phone}`}
+                className="px-8 py-4 border border-navy-200 bg-white text-navy-950 rounded-md font-bold text-sm sm:text-base hover:bg-navy-50 transition-all flex items-center gap-2"
               >
-                Inquire on WhatsApp
+                <Phone className="w-4 h-4 text-orange-500" />
+                Call: {siteConfig.formattedPhone}
               </a>
             </div>
           </div>
         </section>
 
         {/* Filter Controls & Showcase Grid */}
-        <section className="py-16 bg-slate-950">
+        <section className="py-16 sm:py-24 bg-slate-50/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Filter Bar */}
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
@@ -141,10 +137,10 @@ export default function ShowcasePage() {
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}
-                    className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                    className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                       selectedCategory === cat
-                        ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                        : "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                        ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
+                        : "bg-white text-navy-900 hover:bg-slate-100 border border-slate-200 shadow-xs"
                     }`}
                   >
                     {cat}
@@ -155,17 +151,17 @@ export default function ShowcasePage() {
               {/* Autoplay Toggle */}
               <button
                 onClick={() => setIsAutoplayEnabled(!isAutoplayEnabled)}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:bg-slate-800 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-200 text-xs font-bold text-navy-900 hover:bg-slate-50 transition-all shadow-xs cursor-pointer"
                 title="Toggle gallery slideshow autoplay"
               >
                 {isAutoplayEnabled ? (
                   <>
-                    <Pause className="w-3.5 h-3.5 text-orange-400" />
+                    <Pause className="w-3.5 h-3.5 text-orange-500" />
                     <span>Autoplay Active</span>
                   </>
                 ) : (
                   <>
-                    <Play className="w-3.5 h-3.5 text-slate-400" />
+                    <Play className="w-3.5 h-3.5 text-navy-400" />
                     <span>Autoplay Paused</span>
                   </>
                 )}
@@ -173,7 +169,7 @@ export default function ShowcasePage() {
             </div>
 
             {/* Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
               {filteredItems.map((item, index) => (
                 <ShowcaseCardItem
                   key={item.id}
@@ -187,7 +183,7 @@ export default function ShowcasePage() {
             </div>
 
             {filteredItems.length === 0 && (
-              <div className="text-center py-20 text-slate-400">
+              <div className="text-center py-20 text-navy-900/50">
                 <p>No projects found in this category.</p>
               </div>
             )}

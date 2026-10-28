@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   HelpCircle,
   ChevronDown,
-  MessageSquare,
-  PhoneCall,
+  Mail,
+  Phone,
   ArrowRight,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
@@ -31,7 +31,7 @@ export default function FAQPage() {
     {
       category: "General",
       question: "How do I get started with CINORS?",
-      answer: "Getting started is simple! Click 'Get Free Consultation' or message us on WhatsApp with your plot dimensions and location in Tamil Nadu. Our civil engineer will review your details, discuss your family's needs, and send preliminary ideas.",
+      answer: "Getting started is simple! Click 'Get Free Consultation' or submit our online estimate form with your plot dimensions and location in Tamil Nadu. Our civil engineer will review your details, discuss your family's needs, and send preliminary ideas.",
     },
     {
       category: "General",
@@ -76,7 +76,7 @@ export default function FAQPage() {
     {
       category: "Pricing",
       question: "How much does a house planning package cost?",
-      answer: "Our packages are highly transparent, affordable, and based on your plot size and requirement scope. Fill out our free estimate calculator or message us on WhatsApp with your dimensions for an immediate, fixed quotation with zero hidden fees.",
+      answer: "Our packages are highly transparent, affordable, and based on your plot size and requirement scope. Fill out our free estimate calculator or message us with your dimensions for an immediate, fixed quotation with zero hidden fees.",
     },
     {
       category: "Pricing",
@@ -93,52 +93,45 @@ export default function FAQPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-      <Navbar onOpenModal={() => setIsModalOpen(true)} />
+    <div className="min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white">
+      <Navbar onOpenConsultation={() => setIsModalOpen(true)} />
 
-      <main className="flex-grow pt-24 pb-16">
+      <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 lg:py-24 border-b border-slate-800/80 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(249,115,22,0.15),rgba(255,255,255,0))] pointer-events-none" />
-
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-6">
-              <HelpCircle className="w-4 h-4" />
+        <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100 text-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 max-w-4xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+              <HelpCircle className="w-4 h-4 text-orange-500" />
               Frequently Answered Questions
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
               Got Questions? <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-                We Have Clear Answers.
-              </span>
+              <span className="text-orange-500">We Have Clear Answers.</span>
             </h1>
-            <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Find instant answers to common questions about structural drawings, 2D Vastu plans, 3-5 day delivery, and contractor coordination.
+            <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+              Find instant answers to common questions about structural drawings, 2D Vastu plans, 3–5 day delivery, and contractor coordination.
             </p>
 
-            <div className="flex flex-wrap items-center justify-center gap-4">
-              <a
-                href={siteConfig.getWhatsAppUrl("Hi CINORS, I have a specific question about planning my house.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg shadow-orange-500/25 flex items-center gap-2"
-              >
-                <MessageSquare className="w-4 h-4" />
-                Ask Us on WhatsApp
-              </a>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all flex items-center gap-2"
+                className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
               >
-                Book Free Consultation
-                <ArrowRight className="w-4 h-4" />
+                Book Free Consultation <ArrowRight className="w-4 h-4" />
               </button>
+              <a
+                href={`tel:+91${siteConfig.phone}`}
+                className="px-8 py-4 border border-navy-200 bg-white text-navy-950 rounded-md font-bold text-sm sm:text-base hover:bg-navy-50 transition-all flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-orange-500" />
+                Call: {siteConfig.formattedPhone}
+              </a>
             </div>
           </div>
         </section>
 
         {/* Filter Categories & FAQ Accordion */}
-        <section className="py-20 bg-slate-950">
+        <section className="py-16 sm:py-24 bg-slate-50/70">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* Category Pills */}
             <div className="flex flex-wrap items-center justify-center gap-2 mb-12">
@@ -149,10 +142,10 @@ export default function FAQPage() {
                     setActiveCategory(cat);
                     setExpandedIndex(null);
                   }}
-                  className={`px-5 py-2.5 rounded-xl text-sm font-semibold transition-all ${
+                  className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     activeCategory === cat
-                      ? "bg-orange-500 text-white shadow-lg shadow-orange-500/25"
-                      : "bg-slate-900 text-slate-300 hover:bg-slate-800 border border-slate-800"
+                      ? "bg-orange-500 text-white shadow-md shadow-orange-500/20"
+                      : "bg-white text-navy-900 hover:bg-slate-100 border border-slate-200 shadow-xs"
                   }`}
                 >
                   {cat === "All" ? "All Questions" : cat}
@@ -167,15 +160,15 @@ export default function FAQPage() {
                 return (
                   <div
                     key={idx}
-                    className="bg-slate-900/40 border border-slate-800/80 rounded-2xl overflow-hidden transition-colors hover:border-orange-500/30"
+                    className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-xs hover:border-orange-500/40 transition-colors"
                   >
                     <button
                       onClick={() => setExpandedIndex(isOpen ? null : idx)}
-                      className="w-full text-left p-6 flex items-center justify-between gap-4 font-bold text-white focus:outline-none"
+                      className="w-full text-left p-5 sm:p-6 flex items-center justify-between gap-4 font-bold text-navy-950 focus:outline-none cursor-pointer"
                     >
-                      <span className="text-base sm:text-lg">{faq.question}</span>
+                      <span className="text-sm sm:text-base">{faq.question}</span>
                       <ChevronDown
-                        className={`w-5 h-5 text-orange-400 shrink-0 transition-transform duration-300 ${
+                        className={`w-5 h-5 text-orange-500 shrink-0 transition-transform duration-300 ${
                           isOpen ? "rotate-180" : ""
                         }`}
                       />
@@ -189,7 +182,7 @@ export default function FAQPage() {
                           exit={{ opacity: 0, height: 0 }}
                           transition={{ duration: 0.2 }}
                         >
-                          <div className="px-6 pb-6 pt-1 text-slate-300 text-sm sm:text-base leading-relaxed border-t border-slate-800/50">
+                          <div className="px-5 sm:px-6 pb-6 pt-1 text-navy-900/70 text-xs sm:text-sm leading-relaxed border-t border-slate-100">
                             {faq.answer}
                           </div>
                         </motion.div>
@@ -201,27 +194,25 @@ export default function FAQPage() {
             </div>
 
             {/* Support Callout Box */}
-            <div className="mt-16 bg-slate-900/60 border border-slate-800 rounded-3xl p-8 text-center">
-              <h3 className="text-xl sm:text-2xl font-bold text-white mb-2">Have a Custom Plot Requirement?</h3>
-              <p className="text-slate-400 text-sm max-w-lg mx-auto mb-6">
-                Every land parcel is unique. Call our senior engineering desk directly to get answers for your specific site conditions.
+            <div className="mt-16 bg-white border border-slate-200 rounded-3xl p-8 sm:p-10 text-center shadow-lg">
+              <h3 className="text-xl sm:text-2xl font-black text-navy-950 mb-2">Have a Custom Plot Requirement?</h3>
+              <p className="text-navy-900/60 text-sm max-w-lg mx-auto mb-6">
+                Every land parcel is unique. Call our senior engineering desk directly or email us to get answers for your specific site conditions.
               </p>
               <div className="flex flex-wrap items-center justify-center gap-4">
                 <a
-                  href={`tel:${siteConfig.phone}`}
-                  className="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm flex items-center gap-2"
+                  href={`tel:+91${siteConfig.phone}`}
+                  className="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold text-sm flex items-center gap-2 shadow-lg shadow-orange-500/20"
                 >
-                  <PhoneCall className="w-4 h-4" />
+                  <Phone className="w-4 h-4" />
                   Call: {siteConfig.formattedPhone}
                 </a>
                 <a
-                  href={siteConfig.getWhatsAppUrl("Hi CINORS, I want to discuss my land parcel.")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 text-sm flex items-center gap-2"
+                  href={`mailto:${siteConfig.email}`}
+                  className="px-6 py-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-navy-950 font-bold border border-slate-200 text-sm flex items-center gap-2"
                 >
-                  <MessageSquare className="w-4 h-4 text-orange-400" />
-                  WhatsApp Us
+                  <Mail className="w-4 h-4 text-orange-500" />
+                  {siteConfig.email}
                 </a>
               </div>
             </div>

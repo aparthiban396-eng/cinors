@@ -10,6 +10,7 @@ import {
   Clock,
   ArrowRight,
   Check,
+  Phone,
 } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -94,71 +95,64 @@ export default function ProcessPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-orange-500 selection:text-white">
-      <Navbar onOpenModal={() => setIsModalOpen(true)} />
+    <div className="min-h-screen bg-white text-navy-950 font-sans selection:bg-orange-500 selection:text-white">
+      <Navbar onOpenConsultation={() => setIsModalOpen(true)} />
 
-      <main className="flex-grow pt-24 pb-16">
+      <main>
         {/* Hero Section */}
-        <section className="relative overflow-hidden py-16 lg:py-24 border-b border-slate-800/80 bg-gradient-to-b from-slate-900 via-slate-950 to-slate-950">
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(249,115,22,0.15),rgba(255,255,255,0))] pointer-events-none" />
+        <section className="relative py-16 sm:py-24 bg-gradient-to-b from-navy-50/60 to-white overflow-hidden border-b border-navy-100">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center max-w-4xl">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-orange-50 border border-orange-200 text-orange-600 font-bold text-xs uppercase tracking-widest mb-5">
+              <Clock className="w-4 h-4 text-orange-500" />
+              Guaranteed 3–5 Business Day Turnaround
+            </div>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-navy-950 tracking-tight leading-tight mb-6">
+              Our 4-Step Engineering <br />
+              <span className="text-orange-500">Blueprint Delivery Workflow</span>
+            </h1>
+            <p className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto">
+              From raw plot measurements to certified, construction-ready engineering drawings — structured, transparent, and hassle-free.
+            </p>
 
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-            <div className="text-center max-w-3xl mx-auto">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-400 text-xs font-semibold uppercase tracking-wider mb-6">
-                <Clock className="w-4 h-4" />
-                Guaranteed 3–5 Business Day Turnaround
-              </div>
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white mb-6">
-                Our 4-Step Engineering <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-amber-300">
-                  Blueprint Delivery Workflow
-                </span>
-              </h1>
-              <p className="text-lg sm:text-xl text-slate-300 mb-8 leading-relaxed">
-                From raw plot measurements to certified, construction-ready engineering drawings — structured, transparent, and hassle-free.
-              </p>
-
-              <div className="flex flex-wrap items-center justify-center gap-4">
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="px-8 py-3.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg shadow-orange-500/25 flex items-center gap-2 group"
-                >
-                  Start Your Project Today
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <a
-                  href={siteConfig.getWhatsAppUrl("Hi CINORS, I want to start my house plan. What information should I provide?")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold border border-slate-700 transition-all"
-                >
-                  Quick WhatsApp Inquiry
-                </a>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-8 py-4 bg-orange-500 text-white rounded-md font-bold text-sm sm:text-base hover:bg-orange-600 transition-all shadow-xl shadow-orange-500/25 flex items-center gap-2 active:scale-95 cursor-pointer"
+              >
+                Start Your Project Today
+                <ArrowRight className="w-4 h-4" />
+              </button>
+              <a
+                href={`tel:+91${siteConfig.phone}`}
+                className="px-8 py-4 border border-navy-200 bg-white text-navy-950 rounded-md font-bold text-sm sm:text-base hover:bg-navy-50 transition-all flex items-center gap-2"
+              >
+                <Phone className="w-4 h-4 text-orange-500" />
+                Call: {siteConfig.formattedPhone}
+              </a>
             </div>
           </div>
         </section>
 
         {/* The 4 Detailed Steps Timeline */}
-        <section className="py-20 bg-slate-950">
+        <section className="py-16 sm:py-24 bg-slate-50/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="space-y-12">
+            <div className="space-y-10">
               {detailedSteps.map((item) => (
                 <div
                   key={item.step}
-                  className="bg-slate-900/40 border border-slate-800/80 rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 transition-all relative overflow-hidden"
+                  className="bg-white border border-slate-200/90 rounded-2xl sm:rounded-3xl p-6 sm:p-10 hover:border-orange-500/40 hover:shadow-xl transition-all shadow-xs relative overflow-hidden"
                 >
                   <div className="flex flex-col lg:flex-row gap-8 items-start">
                     {/* Step badge & icon */}
                     <div className="flex items-center gap-4 lg:flex-col lg:items-start shrink-0">
-                      <div className="w-16 h-16 rounded-2xl bg-orange-500/10 border border-orange-500/30 flex items-center justify-center text-orange-400">
+                      <div className="w-16 h-16 rounded-2xl bg-orange-50 border border-orange-200 flex items-center justify-center text-orange-500">
                         {item.icon}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-3xl sm:text-4xl font-extrabold text-orange-500">
+                        <span className="text-3xl sm:text-4xl font-black text-orange-500">
                           {item.step}
                         </span>
-                        <span className="text-xs font-bold uppercase tracking-wider text-slate-400 bg-slate-800/80 px-2.5 py-1 rounded-md mt-1 w-fit">
+                        <span className="text-xs font-bold uppercase tracking-wider text-navy-900/60 bg-slate-100 px-2.5 py-1 rounded-md mt-1 w-fit">
                           {item.timeline}
                         </span>
                       </div>
@@ -166,27 +160,27 @@ export default function ProcessPage() {
 
                     {/* Content */}
                     <div className="flex-1">
-                      <h2 className="text-2xl sm:text-3xl font-bold text-white mb-3">
+                      <h2 className="text-2xl sm:text-3xl font-black text-navy-950 mb-3 tracking-tight">
                         {item.title}
                       </h2>
-                      <p className="text-slate-300 text-base sm:text-lg mb-6 leading-relaxed">
+                      <p className="text-navy-900/70 text-sm sm:text-base mb-6 leading-relaxed">
                         {item.description}
                       </p>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-6">
                         {item.activities.map((act, i) => (
-                          <div key={i} className="flex items-start gap-2.5 text-sm text-slate-400">
-                            <CheckCircle2 className="w-4 h-4 text-orange-400 shrink-0 mt-0.5" />
+                          <div key={i} className="flex items-start gap-2.5 text-xs sm:text-sm text-navy-900/70">
+                            <CheckCircle2 className="w-4 h-4 text-orange-500 shrink-0 mt-0.5" />
                             <span>{act}</span>
                           </div>
                         ))}
                       </div>
 
-                      <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-3.5 flex items-center justify-between">
-                        <span className="text-xs uppercase tracking-wider font-semibold text-slate-400">
+                      <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <span className="text-xs uppercase tracking-wider font-bold text-navy-900/50">
                           Stage Deliverable:
                         </span>
-                        <span className="text-sm font-bold text-orange-400">
+                        <span className="text-xs sm:text-sm font-bold text-orange-600">
                           {item.output}
                         </span>
                       </div>
@@ -199,16 +193,17 @@ export default function ProcessPage() {
         </section>
 
         {/* What You Receive - Package Deliverables */}
-        <section className="py-20 bg-slate-900/50 border-y border-slate-800/80">
+        <section className="py-16 sm:py-24 bg-white border-y border-slate-100">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-2xl mx-auto mb-16">
-              <span className="text-orange-500 font-semibold tracking-wider text-sm uppercase">
+              <span className="text-xs font-black uppercase text-orange-500 tracking-widest mb-3 block">
                 Complete Deliverables
               </span>
-              <h2 className="text-3xl sm:text-4xl font-bold text-white mt-2 mb-4">
+              <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-navy-950 mb-4">
                 What&apos;s Inside Your Blueprint Package
               </h2>
-              <p className="text-slate-400">
+              <div className="w-16 h-1 bg-orange-500 mx-auto mt-2 mb-4" />
+              <p className="text-navy-900/60 text-sm sm:text-base">
                 You receive high-resolution, print-ready A3/A4 digital drawings formatted for clear understanding by masons, civil engineers, and local authorities.
               </p>
             </div>
@@ -217,12 +212,12 @@ export default function ProcessPage() {
               {packageDeliverables.map((item, idx) => (
                 <div
                   key={idx}
-                  className="bg-slate-950 border border-slate-800/80 rounded-2xl p-4 sm:p-5 flex items-start gap-3.5 hover:border-orange-500/30 transition-colors"
+                  className="bg-slate-50 border border-slate-200 rounded-xl p-4 sm:p-5 flex items-start gap-3.5 hover:border-orange-500/40 hover:bg-white transition-all shadow-xs"
                 >
-                  <div className="p-1 rounded-full bg-orange-500/10 text-orange-400 shrink-0 mt-0.5">
+                  <div className="p-1 rounded-full bg-orange-50 text-orange-600 shrink-0 mt-0.5">
                     <Check className="w-4 h-4" />
                   </div>
-                  <span className="text-sm sm:text-base text-slate-300 font-medium">
+                  <span className="text-xs sm:text-sm text-navy-950 font-bold">
                     {item}
                   </span>
                 </div>
@@ -232,41 +227,41 @@ export default function ProcessPage() {
         </section>
 
         {/* What We Need From You Section */}
-        <section className="py-20 bg-slate-950">
+        <section className="py-16 sm:py-24 bg-slate-50/60">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-3xl p-8 sm:p-12">
+            <div className="bg-navy-950 text-white rounded-3xl p-8 sm:p-12 shadow-2xl">
               <div className="text-center max-w-2xl mx-auto mb-10">
-                <span className="text-orange-400 font-semibold tracking-wider text-xs uppercase">
+                <span className="text-orange-400 font-bold tracking-widest text-xs uppercase mb-2 block">
                   Preparation Guide
                 </span>
-                <h3 className="text-2xl sm:text-3xl font-extrabold text-white mt-2 mb-3">
+                <h3 className="text-2xl sm:text-3xl font-black text-white mt-1 mb-3">
                   What Information Do We Need From You?
                 </h3>
-                <p className="text-slate-400 text-sm">
+                <p className="text-navy-200/60 text-sm">
                   To prepare your blueprint swiftly, have these details ready when contacting us:
                 </p>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div className="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl text-center">
+                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
                   <div className="text-orange-400 font-black text-2xl mb-2">1</div>
                   <h4 className="font-bold text-white mb-1">Plot Dimensions</h4>
-                  <p className="text-xs text-slate-400">Length & breadth in feet or meters (e.g. 30x40, 25x50).</p>
+                  <p className="text-xs text-navy-200/60">Length & breadth in feet or meters (e.g. 30x40, 25x50).</p>
                 </div>
-                <div className="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl text-center">
+                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
                   <div className="text-orange-400 font-black text-2xl mb-2">2</div>
                   <h4 className="font-bold text-white mb-1">Facing Direction</h4>
-                  <p className="text-xs text-slate-400">Direction the road faces (North, East, South, or West).</p>
+                  <p className="text-xs text-navy-200/60">Direction the road faces (North, East, South, or West).</p>
                 </div>
-                <div className="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl text-center">
+                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
                   <div className="text-orange-400 font-black text-2xl mb-2">3</div>
                   <h4 className="font-bold text-white mb-1">BHK & Floors</h4>
-                  <p className="text-xs text-slate-400">Ground floor, G+1, number of bedrooms and attached baths.</p>
+                  <p className="text-xs text-navy-200/60">Ground floor, G+1, number of bedrooms and attached baths.</p>
                 </div>
-                <div className="bg-slate-950/70 border border-slate-800 p-5 rounded-2xl text-center">
+                <div className="bg-white/5 border border-white/10 p-5 rounded-2xl text-center">
                   <div className="text-orange-400 font-black text-2xl mb-2">4</div>
                   <h4 className="font-bold text-white mb-1">Special Needs</h4>
-                  <p className="text-xs text-slate-400">Puja room, car porch, open terrace, or rental portion.</p>
+                  <p className="text-xs text-navy-200/60">Puja room, car porch, open terrace, or rental portion.</p>
                 </div>
               </div>
             </div>
