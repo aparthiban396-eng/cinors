@@ -121,7 +121,7 @@ export default function ShowcasePage() {
               transition={{ duration: 0.5, delay: 0.22, ease: [0.16, 1, 0.3, 1] }}
               className="text-base sm:text-lg text-navy-900/70 leading-relaxed mb-8 max-w-2xl mx-auto"
             >
-              Explore our completed residential villas, Vastu floor plans, tensile carports, and commercial projects across Tamil Nadu. Swipe through multi-angle views and 3D architectural renders.
+              Explore our completed residential villas, Vastu floor plans, and architectural projects across Tamil Nadu. Swipe through multi-angle views and 3D architectural renders.
             </motion.p>
 
             <motion.div

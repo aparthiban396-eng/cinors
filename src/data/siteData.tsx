@@ -134,7 +134,8 @@ export const processSteps: ProcessStep[] = [
   },
 ];
 
-export const showcaseItems: ShowcaseItem[] = [
+// Archived Canopy Projects (Temporarily hidden from showcase; keep intact to re-enable anytime)
+export const archivedCanopyItems: ShowcaseItem[] = [
   {
     id: "tensile-canopy",
     title: "Coffee Shop Tensile Canopy",
@@ -155,56 +156,6 @@ export const showcaseItems: ShowcaseItem[] = [
       { label: "Roofing Membrane", value: "Architectural PVDF tensile fabric (waterproof, UV & heat resistant)" },
       { label: "Application", value: "Outdoor Coffee Shop, Rooftop Café & Alfresco Dining" },
       { label: "Key Engineering", value: "Tie-back cable tensioners, wind load deflection & integrated rainwater runoff" },
-    ],
-    featured: true,
-  },
-  {
-    id: "modern-villa",
-    title: "Modern Minimalist Villa",
-    category: "3D Elevation & Planning",
-    tag: "Residential",
-    image: "/images/dream-home.png",
-    dimensions: "35ft x 50ft Plot",
-    description: "Contemporary G+1 independent residential elevation featuring natural stone textures, expansive glass apertures, and vastu-compliant spatial zoning.",
-    specs: [
-      { label: "Type", value: "G+1 Luxury Residential Villa" },
-      { label: "Key Features", value: "Cross-ventilation, open-concept living, private terrace garden" },
-    ],
-  },
-  {
-    id: "contemporary-home",
-    title: "Contemporary Double-Story Home",
-    category: "Residential Architecture",
-    tag: "Residential",
-    image: "/images/modern-villa.png",
-    dimensions: "30ft x 40ft Plot",
-    description: "Smart urban duplex engineered to maximize space and natural ventilation on standard residential plots across Tamil Nadu.",
-    specs: [
-      { label: "Type", value: "Urban Duplex Residence" },
-      { label: "Key Features", value: "Efficient structural grid, optimized column sizing, cost-controlled layout" },
-    ],
-  },
-  {
-    id: "g1-residential-elevation",
-    title: "Contemporary G+1 Residential Elevation",
-    category: "Residential Architecture & 3D Elevation",
-    tag: "Residential",
-    image: "/images/residential-g1-front.jpg",
-    gallery: [
-      "/images/residential-g1-front.jpg",
-      "/images/residential-g1-perspective.jpg",
-      "/images/g1-residence-floorplan.jpg",
-    ],
-    dimensions: "8.0m x 17.0m (195 m² / ~2,100 sq.ft Total Built-Up)",
-    description: "A striking G+1 independent residential building designed on a compact 8m x 17m plot, featuring a bold mix of geometric facade elements — vertical wooden-finish cladding, sculpted red and grey accent panels, decorative jali screens, and contrasting warm-neutral tones. The design maximizes street presence with staggered massing, a covered car porch with wooden-finish gates, and a functional open terrace on the first floor ideal for relaxation or future vertical expansion.",
-    specs: [
-      { label: "Plot Footprint", value: "8.0m x 17.0m (136 m²)" },
-      { label: "Building Type", value: "G+1 Independent Residential Dwelling" },
-      { label: "Total Built-Up Area", value: "195 m² / ~2,100 sq.ft (Ground + First Floor)" },
-      { label: "Floors", value: "Ground Floor + First Floor with open terrace & staircase headroom" },
-      { label: "Elevation Style", value: "Contemporary with geometric accent panels, vertical cladding & jali screens" },
-      { label: "Key Features", value: "Covered car parking, decorative brick-finish gate pillars, cross-ventilated rooms, first-floor balcony & open terrace" },
-      { label: "Facade Materials", value: "Exterior plastered walls, wooden-texture ACP cladding, perforated terracotta jali, natural stone dado at base" },
     ],
     featured: true,
   },
@@ -299,6 +250,60 @@ export const showcaseItems: ShowcaseItem[] = [
     ],
     featured: true,
   },
+];
+
+export const showcaseItems: ShowcaseItem[] = [
+  {
+    id: "modern-villa",
+    title: "Modern Minimalist Villa",
+    category: "3D Elevation & Planning",
+    tag: "Residential",
+    image: "/images/dream-home.png",
+    dimensions: "35ft x 50ft Plot",
+    description: "Contemporary G+1 independent residential elevation featuring natural stone textures, expansive glass apertures, and vastu-compliant spatial zoning.",
+    specs: [
+      { label: "Type", value: "G+1 Luxury Residential Villa" },
+      { label: "Key Features", value: "Cross-ventilation, open-concept living, private terrace garden" },
+    ],
+    featured: true,
+  },
+  {
+    id: "contemporary-home",
+    title: "Contemporary Double-Story Home",
+    category: "Residential Architecture",
+    tag: "Residential",
+    image: "/images/modern-villa.png",
+    dimensions: "30ft x 40ft Plot",
+    description: "Smart urban duplex engineered to maximize space and natural ventilation on standard residential plots across Tamil Nadu.",
+    specs: [
+      { label: "Type", value: "Urban Duplex Residence" },
+      { label: "Key Features", value: "Efficient structural grid, optimized column sizing, cost-controlled layout" },
+    ],
+  },
+  {
+    id: "g1-residential-elevation",
+    title: "Contemporary G+1 Residential Elevation",
+    category: "Residential Architecture & 3D Elevation",
+    tag: "Residential",
+    image: "/images/residential-g1-front.jpg",
+    gallery: [
+      "/images/residential-g1-front.jpg",
+      "/images/residential-g1-perspective.jpg",
+      "/images/g1-residence-floorplan.jpg",
+    ],
+    dimensions: "8.0m x 17.0m (195 m² / ~2,100 sq.ft Total Built-Up)",
+    description: "A striking G+1 independent residential building designed on a compact 8m x 17m plot, featuring a bold mix of geometric facade elements — vertical wooden-finish cladding, sculpted red and grey accent panels, decorative jali screens, and contrasting warm-neutral tones. The design maximizes street presence with staggered massing, a covered car porch with wooden-finish gates, and a functional open terrace on the first floor ideal for relaxation or future vertical expansion.",
+    specs: [
+      { label: "Plot Footprint", value: "8.0m x 17.0m (136 m²)" },
+      { label: "Building Type", value: "G+1 Independent Residential Dwelling" },
+      { label: "Total Built-Up Area", value: "195 m² / ~2,100 sq.ft (Ground + First Floor)" },
+      { label: "Floors", value: "Ground Floor + First Floor with open terrace & staircase headroom" },
+      { label: "Elevation Style", value: "Contemporary with geometric accent panels, vertical cladding & jali screens" },
+      { label: "Key Features", value: "Covered car parking, decorative brick-finish gate pillars, cross-ventilated rooms, first-floor balcony & open terrace" },
+      { label: "Facade Materials", value: "Exterior plastered walls, wooden-texture ACP cladding, perforated terracotta jali, natural stone dado at base" },
+    ],
+    featured: true,
+  },
   {
     id: "interior-design",
     title: "Luxury Lounge Interior Concept",
@@ -311,6 +316,7 @@ export const showcaseItems: ShowcaseItem[] = [
       { label: "Type", value: "Living & Dining Interior" },
       { label: "Key Features", value: "Concealed cabinetry, modular spatial division, ambient cove lighting" },
     ],
+    featured: true,
   },
 ];
 
