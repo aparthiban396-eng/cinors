@@ -47,7 +47,8 @@ export default function Footer() {
               <li><Link href="/services/#elevations" className="hover:text-orange-400 transition-colors">3D Exterior Elevations</Link></li>
               <li><Link href="/services/#working" className="hover:text-orange-400 transition-colors">Working Construction Blueprints</Link></li>
               <li><Link href="/services/#interiors" className="hover:text-orange-400 transition-colors">Interior Concepts & Spatial Plans</Link></li>
-              <li><Link href="/showcase/#walkthrough" className="hover:text-orange-400 transition-colors">3D Walkthrough Videos</Link></li>
+              <li><Link href="/services/#vastu" className="hover:text-orange-400 transition-colors">Vastu Planning & Consultation</Link></li>
+              <li><Link href="/showcase/" className="hover:text-orange-400 transition-colors">3D Design & Elevation Showcase</Link></li>
             </ul>
           </div>
 
